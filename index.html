@@ -1,276 +1,119 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Registro de Sessão Terapêutica</title>
-    <meta
-      name="description"
-      content="Ficha digital para registrar avaliação radiônica, Bovis, chakras, causas, gráficos, despertar e registro da sessão."
-    />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div class="page-shell">
-      <header class="app-header">
-        <div>
-          <p class="eyebrow">Avaliação e registro</p>
-          <h1>Registro de Sessão Terapêutica</h1>
-          <p>PROTOCOLO DE LIMPEZA E PROTEÇÃO</p>
-        </div>
-        <div class="header-actions no-print">
-          <button class="button button-secondary" type="button" id="saveData">Salvar dados</button>
-          <button class="button button-secondary" type="button" id="loadData">Carregar dados</button>
-          <button class="button button-secondary" type="button" id="clearForm">Limpar</button>
-          <button class="button button-primary" type="button" id="printForm">Salvar formulário em PDF</button>
-          <input class="file-input" id="loadDataFile" type="file" accept="application/json" />
-        </div>
-      </header>
-
-      <main>
-        <form id="sessionForm" autocomplete="off">
-          <details class="section">
-            <summary><h2>1. Identificação</h2></summary>
-            <div class="grid grid-2">
-              <label class="field">
-                <span>Nome</span>
-                <input type="text" name="nome" />
-              </label>
-              <label class="field">
-                <span>Data de nascimento</span>
-                <input type="date" name="nascimento" />
-              </label>
-              <label class="field">
-                <span>Terapeuta</span>
-                <input type="text" name="terapeuta" />
-              </label>
-              <label class="field">
-                <span>Data da sessão</span>
-                <input type="date" name="sessao" />
-              </label>
-              <label class="field field-wide">
-                <span>Tema da sessão / questão principal</span>
-                <input type="text" name="tema_sessao" placeholder="Ex: proteção, relacionamento, trabalho, saúde, prosperidade, clareza emocional" />
-              </label>
-            </div>
-          </details>
-
-          <details class="section">
-            <summary><h2>2. Vitalidade - Escala / Unidades Bovis</h2></summary>
-            <div class="bovis-card-grid">
-              <article class="bovis-card">
-                <h3>Físico</h3>
-                <label class="mini-field"><span>Inicial</span><input type="number" name="fisico_inicial" placeholder="U.B." /></label>
-                <label class="mini-field"><span>Após sessão</span><input type="number" name="fisico_final" placeholder="U.B." /></label>
-              </article>
-              <article class="bovis-card">
-                <h3>Mental</h3>
-                <label class="mini-field"><span>Inicial</span><input type="number" name="mental_inicial" placeholder="U.B." /></label>
-                <label class="mini-field"><span>Após sessão</span><input type="number" name="mental_final" placeholder="U.B." /></label>
-              </article>
-              <article class="bovis-card">
-                <h3>Emocional</h3>
-                <label class="mini-field"><span>Inicial</span><input type="number" name="emocional_inicial" placeholder="U.B." /></label>
-                <label class="mini-field"><span>Após sessão</span><input type="number" name="emocional_final" placeholder="U.B." /></label>
-              </article>
-              <article class="bovis-card">
-                <h3>Espiritual</h3>
-                <label class="mini-field"><span>Inicial</span><input type="number" name="espiritual_inicial" placeholder="U.B." /></label>
-                <label class="mini-field"><span>Após sessão</span><input type="number" name="espiritual_final" placeholder="U.B." /></label>
-              </article>
-              <article class="bovis-card">
-                <h3>Vitalidade geral</h3>
-                <label class="mini-field"><span>Inicial</span><input type="number" name="vitalidade_geral_inicial" placeholder="U.B." /></label>
-                <label class="mini-field"><span>Após sessão</span><input type="number" name="vitalidade_geral_final" placeholder="U.B." /></label>
-              </article>
-              <article class="bovis-card">
-                <h3>Ambiente pessoal</h3>
-                <label class="mini-field"><span>Inicial</span><input type="number" name="ambiente_pessoal_inicial" placeholder="U.B." /></label>
-                <label class="mini-field"><span>Após sessão</span><input type="number" name="ambiente_pessoal_final" placeholder="U.B." /></label>
-              </article>
-              <article class="bovis-card">
-                <h3>Ambiente de trabalho</h3>
-                <label class="mini-field"><span>Inicial</span><input type="number" name="ambiente_trabalho_inicial" placeholder="U.B." /></label>
-                <label class="mini-field"><span>Após sessão</span><input type="number" name="ambiente_trabalho_final" placeholder="U.B." /></label>
-              </article>
-            </div>
-
-            <p class="bovis-legend">
-              <strong>Muito crítico:</strong> 0 a 300 U.B. ·
-              <strong>Crítico:</strong> 301 a 3.999 U.B. ·
-              <strong>Atenção:</strong> 4.000 a 5.999 U.B. ·
-              <strong>Saudável:</strong> 6.000 a 8.499 U.B. ·
-              <strong>Elevado:</strong> 8.500 a 10.000 U.B. ·
-              <strong>Muito elevado:</strong> acima de 10.000 U.B.
-            </p>
-
-            <details class="bovis-scale" aria-label="Régua descritiva do Biômetro de Bovis">
-              <summary><h3>Régua de referência Bovis</h3></summary>
-              <div class="bovis-track" aria-hidden="true">
-                <span class="zone zone-critical"></span>
-                <span class="zone zone-low"></span>
-                <span class="zone zone-alert"></span>
-                <span class="zone zone-neutral"></span>
-                <span class="zone zone-healthy"></span>
-                <span class="zone zone-high"></span>
-              </div>
-              <div class="bovis-descriptors">
-                <article class="bovis-descriptor">
-                  <strong>De 0 a 300 U.B. (Muito crítico):</strong>
-                  <p>Indica forte desvitalização e exige prioridade na limpeza, proteção, reenergização e acompanhamento.</p>
-                </article>
-                <article class="bovis-descriptor">
-                  <strong>De 301 a 3.999 U.B. (Crítico):</strong>
-                  <p>Sinaliza desgaste acentuado, perda de energia vital, campo fragilizado ou ambiente que drena vitalidade.</p>
-                </article>
-                <article class="bovis-descriptor">
-                  <strong>De 4.000 a 5.999 U.B. (Atenção):</strong>
-                  <p>Aponta oscilação, cansaço ou desequilíbrio médio, pedindo reforço no cuidado energético.</p>
-                </article>
-                <article class="bovis-descriptor">
-                  <strong>De 6.000 a 8.499 U.B. (Saudável):</strong>
-                  <p>Representa faixa favorável de vitalidade, equilíbrio e melhor sustentação energética.</p>
-                </article>
-                <article class="bovis-descriptor">
-                  <strong>De 8.500 a 10.000 U.B. (Elevado):</strong>
-                  <p>Indica vitalidade alta, expansão energética, conexão sutil ou ambiente especialmente harmonizado.</p>
-                </article>
-                <article class="bovis-descriptor">
-                  <strong>Acima de 10.000 U.B. (Muito elevado):</strong>
-                  <p>Registre como expansão elevada e avalie com cuidado o contexto, a intenção e a estabilidade do campo.</p>
-                </article>
-              </div>
-            </details>
-          </details>
-
-          <details class="section">
-            <summary><h2>3. Chakras envolvidos</h2></summary>
-            <div class="grid grid-3 chakra-section">
-              <div class="field-group chakra-picker">
-                <h3>Chakras envolvidos</h3>
-                <p class="hint">Marque no boneco ou na lista os chakras em desequilíbrio. Clique ou passe o mouse sobre cada chakra para ver o resumo.</p>
-                <div class="choice-grid" id="chakraList"></div>
-              </div>
-              <div class="chakra-figure" id="chakraFigure" aria-label="Boneco dos chakras"></div>
-              <div class="chakra-balloons" id="chakraBalloons" aria-live="polite"></div>
-            </div>
-          </details>
-
-          <details class="section">
-            <summary>
-            <div class="section-title-row">
-              <h2>4. Causa</h2>
-            </div>
-            </summary>
-            <p class="hint">Selecione Campo e Tipo de limite. Nas causas exibidas, clique ou passe o mouse sobre o nome para ler a explicação.</p>
-            <div class="cause-filter-grid">
-              <div class="field-group">
-                <h3>Campo do desequilíbrio</h3>
-                <div class="choice-stack" id="causeFieldList"></div>
-              </div>
-              <div class="field-group">
-                <h3>Tipo de limite</h3>
-                <div class="choice-stack" id="causeLimitList"></div>
-              </div>
-            </div>
-            <div id="causePanel" class="cause-panel"></div>
-          </details>
-
-          <details class="section">
-            <summary><h2>5. Tratamento Radiônico com Geometrias Sagradas</h2></summary>
-            <div id="graphGroups" class="group-list"></div>
-          </details>
-
-          <details class="section">
-            <summary><h2>6. Outros tratamentos holísticos identificados pela radiestesia</h2></summary>
-            <div id="holisticList" class="choice-grid choice-grid-wide"></div>
-
-            <label class="field therapy-detail">
-              <span>Outros</span>
-              <input
-                type="text"
-                name="outro_tratamento_holistico"
-                placeholder="Especifique outro tratamento holístico identificado"
-              />
-            </label>
-
-            <label class="field therapy-detail">
-              <span>Observações e especificações terapêuticas</span>
-              <textarea
-                name="detalhamento_terapeutica"
-                rows="6"
-                placeholder="Registre orientações, modo de uso, frequência, duração ou outras especificações terapêuticas."
-              ></textarea>
-            </label>
-          </details>
-
-          <details class="section">
-            <summary><h2>7. Despertar</h2></summary>
-            <div id="awakeningList" class="choice-grid choice-grid-wide"></div>
-          </details>
-
-          <details class="section">
-            <summary><h2>8. Registro da sessão</h2></summary>
-            <div class="grid grid-2">
-              <label class="field">
-                <span>Testemunho(s) utilizado(s)</span>
-                <textarea name="testemunhos" rows="4"></textarea>
-              </label>
-              <label class="field">
-                <span>Comando / intenção utilizada</span>
-                <textarea name="comando" rows="4"></textarea>
-              </label>
-              <label class="field">
-                <span>Observações da sessão</span>
-                <textarea name="observacoes" rows="5"></textarea>
-              </label>
-              <div class="grid grid-1">
-                <label class="field">
-                  <span>Tempo de permanência / tratamento indicado</span>
-                  <input type="text" name="tempo_tratamento" />
-                </label>
-                <label class="field">
-                  <span>Data para nova aferição</span>
-                  <input type="date" name="nova_afericao" />
-                </label>
-              </div>
-            </div>
-          </details>
-
-          <details class="section" id="reportSection">
-            <summary><h2>9. Relatório da sessão</h2></summary>
-            <div class="report-actions no-print">
-              <button class="button button-secondary" type="button" id="generateReport">Gerar / atualizar relatório</button>
-              <button class="button button-primary" type="button" id="saveReportPdf">Salvar relatório em PDF</button>
-            </div>
-            <label class="field">
-              <span>Relatório gerado</span>
-              <textarea id="integrativeReport" name="relatorio_integrativo" rows="16"></textarea>
-            </label>
-            <pre class="report-print-view" id="reportPrintView"></pre>
-            <div class="report-visual-view" id="reportVisualView"></div>
-          </details>
-
-          <div class="bottom-actions no-print">
-            <button class="button button-secondary" type="button" id="saveDataBottom">Salvar dados</button>
-            <button class="button button-secondary" type="button" id="clearFormBottom">Limpar</button>
-            <button class="button button-primary" type="button" id="printFormBottom">Salvar formulário em PDF</button>
-            <button class="button button-primary" type="button" id="saveReportPdfBottom">Salvar relatório em PDF</button>
-          </div>
-        </form>
-      </main>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOLAR — Registro de Sessão</title>
+  <meta name="description" content="Formulário SOLAR — Sistema de observação, limpeza e alinhamento pela radiestesia.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page-shell">
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">Registro de sessão</p>
+      <h1>SOLAR</h1>
+      <p><strong>Sistema de observação, limpeza e alinhamento pela radiestesia.</strong></p>
+      <p>Matriz organizada por Rodrigo Bittencourt.</p>
     </div>
-
-    <div class="modal-overlay" id="infoModal" aria-hidden="true">
-      <article class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-        <button class="modal-close" type="button" id="closeModal" aria-label="Fechar">x</button>
-        <p class="modal-kicker" id="modalKicker"></p>
-        <h2 id="modalTitle"></h2>
-        <img class="modal-image" id="modalImage" alt="" hidden />
-        <p id="modalDescription"></p>
-      </article>
+    <div class="header-actions no-print">
+      <button type="button" class="button secondary" id="saveData">Salvar dados</button>
+      <button type="button" class="button secondary" id="loadData">Carregar dados</button>
+      <button type="button" class="button secondary" id="clearForm">Limpar</button>
+      <button type="button" class="button primary" id="printForm">Salvar formulário em PDF</button>
+      <input id="loadDataFile" class="file-input" type="file" accept="application/json">
     </div>
+  </header>
 
-    <script src="app.js"></script>
-  </body>
+  <main>
+    <form id="sessionForm" autocomplete="off">
+      <details class="section" open>
+        <summary><h2>1. Identificação</h2></summary>
+        <div class="grid grid-2">
+          <label class="field"><span>Nome</span><input type="text" name="nome"></label>
+          <label class="field"><span>Data de nascimento</span><input type="date" name="nascimento"></label>
+          <label class="field"><span>Data da sessão</span><input type="date" name="sessao"></label>
+          <label class="field"><span>Terapeuta</span><input type="text" name="terapeuta" value="Rodrigo Bittencourt"></label>
+          <label class="field field-wide"><span>Queixas principais / tema da sessão</span><textarea name="queixas" rows="4"></textarea></label>
+        </div>
+      </details>
+
+      <details class="section">
+        <summary><h2>2. Vitalidade — Biômetro de Bovis</h2></summary>
+        <p class="hint">Registre a aferição inicial e, quando realizada, a aferição após a sessão.</p>
+        <div class="bovis-grid" id="bovisGrid"></div>
+        <p class="bovis-legend"><strong>Muito crítico:</strong> 0–300 U.B. · <strong>Crítico:</strong> 301–3.999 · <strong>Atenção:</strong> 4.000–5.999 · <strong>Saudável:</strong> 6.000–8.499 · <strong>Elevado:</strong> 8.500–10.000 · <strong>Muito elevado:</strong> acima de 10.000 U.B.</p>
+      </details>
+
+      <details class="section">
+        <summary><h2>3. Chakras envolvidos</h2></summary>
+        <div id="chakraList" class="choice-grid"></div>
+      </details>
+
+      <details class="section">
+        <summary><h2>4. Eixos ativos</h2></summary>
+        <div id="axisList" class="choice-grid"></div>
+      </details>
+
+      <div id="protocolParts"></div>
+
+      <details class="section">
+        <summary><h2>12. Outros tratamentos holísticos identificados pela radiestesia</h2></summary>
+        <div id="holisticList" class="choice-grid choice-grid-wide"></div>
+        <label class="field therapy-detail">
+          <span>Outros</span>
+          <input type="text" name="outro_tratamento_holistico" placeholder="Especifique outro tratamento holístico">
+        </label>
+        <div class="grid grid-2 therapy-detail">
+          <label class="field"><span>Quantidade de sessões</span><input type="text" name="quantidade_sessoes"></label>
+          <label class="field"><span>Periodicidade</span>
+            <select name="periodicidade">
+              <option value="">Selecione</option><option>Semanal</option><option>Quinzenal</option><option>Mensal</option><option>Trimestral</option>
+            </select>
+          </label>
+        </div>
+        <label class="field therapy-detail">
+          <span>Observações e especificações terapêuticas</span>
+          <textarea name="detalhamento_terapeutica" rows="6" placeholder="Registre orientações, modo de uso, frequência, duração ou outras especificações terapêuticas."></textarea>
+        </label>
+      </details>
+
+      <details class="section">
+        <summary><h2>13. Óleos essenciais</h2></summary>
+        <div id="oilList" class="choice-grid choice-grid-wide"></div>
+        <label class="field therapy-detail"><span>Outro óleo / especificação</span><input type="text" name="outro_oleo"></label>
+      </details>
+
+      <details class="section">
+        <summary><h2>14. Registro da sessão</h2></summary>
+        <div class="grid grid-2">
+          <label class="field"><span>Testemunho(s) utilizado(s)</span><textarea name="testemunhos" rows="4"></textarea></label>
+          <label class="field"><span>Comando / intenção utilizada</span><textarea name="comando" rows="4"></textarea></label>
+          <label class="field field-wide"><span>Observações da sessão</span><textarea name="observacoes" rows="5"></textarea></label>
+          <label class="field"><span>Tempo de permanência / tratamento indicado</span><input type="text" name="tempo_tratamento"></label>
+          <label class="field"><span>Data para nova aferição</span><input type="date" name="nova_afericao"></label>
+        </div>
+      </details>
+
+      <details class="section" id="reportSection">
+        <summary><h2>15. Relatório da sessão</h2></summary>
+        <div class="report-actions no-print">
+          <button type="button" class="button secondary" id="generateReport">Gerar / atualizar relatório</button>
+          <button type="button" class="button primary" id="saveReportPdf">Salvar relatório em PDF</button>
+        </div>
+        <label class="field"><span>Relatório gerado — editável</span><textarea id="integrativeReport" name="relatorio_integrativo" rows="24"></textarea></label>
+        <div id="reportVisualView" class="report-visual-view"></div>
+      </details>
+
+      <div class="bottom-actions no-print">
+        <button type="button" class="button secondary" id="saveDataBottom">Salvar dados</button>
+        <button type="button" class="button secondary" id="clearFormBottom">Limpar</button>
+        <button type="button" class="button primary" id="printFormBottom">Salvar formulário em PDF</button>
+        <button type="button" class="button primary" id="saveReportPdfBottom">Salvar relatório em PDF</button>
+      </div>
+    </form>
+  </main>
+</div>
+<script src="app.js"></script>
+</body>
 </html>

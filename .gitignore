@@ -1,7 +1,3 @@
 .DS_Store
 Thumbs.db
-node_modules/
-.vercel/
-dist/
-work/
-outputs/
+*.log
