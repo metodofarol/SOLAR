@@ -17,7 +17,7 @@ Aplicação estática em HTML, CSS e JavaScript para registrar uma sessão radi�
 - Avisos de clique ou passagem do mouse nos itens com informação adicional.
 - Textos explicativos condensados para causas dos campos emocional e mental.
 - Tratamento radiônico com geometrias sagradas: Harmonia, Limpeza, Proteção, Psicoemocional e Vitalidade, com popups explicativos e imagens ilustrativas.
-- Outros tratamentos holísticos identificados pela radiestesia, incluindo Tarô, com campo para detalhar a terapêutica.
+- Outros tratamentos holísticos identificados pela radiestesia, incluindo Tarô e a opção **Outros**, com campo livre para especificar outro tratamento e área de **Observações e especificações terapêuticas**.
 - Seção Despertar.
 - Registro da sessão com testemunhos, intenção, observações, tempo de tratamento e nova aferição.
 - Relatório da sessão, editável e dividido em seções.

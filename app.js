@@ -350,6 +350,7 @@ const holisticTreatments = [
   "Meditação budista (zazen ou daimoku)",
   "Reiki",
   "Tarô",
+  "Outros",
 ];
 
 const graphImageBank = {
@@ -1330,6 +1331,7 @@ function buildIntegrativeReport() {
   const graphTypes = getCheckedValues("tipo_grafico");
   const selectedGraphData = getSelectedGraphReportData();
   const holistic = getCheckedValues("tratamento_holistico");
+  const otherHolistic = getFormValue("outro_tratamento_holistico");
   const awakening = getCheckedValues("despertar");
   const selectedAwakeningData = awakening.map((item) => getGraphInfo(item, "Despertar"));
   const bovisLines = buildBovisReport();
@@ -1395,10 +1397,24 @@ function buildIntegrativeReport() {
     addReportSection(report, 5, "Tratamento radiônico com geometrias sagradas", lines);
   }
 
-  if (holistic.length || therapyDetail) {
+  if (holistic.length || otherHolistic || therapyDetail) {
     const lines = [];
-    if (holistic.length) lines.push(`Terapias indicadas: ${holistic.join(", ")}.`);
-    if (therapyDetail) lines.push(`Detalhamento terapêutico: ${therapyDetail}`);
+    const namedHolistic = holistic.filter((item) => item !== "Outros");
+
+    if (namedHolistic.length) {
+      lines.push(`Terapias indicadas: ${namedHolistic.join(", ")}.`);
+    }
+
+    if (otherHolistic) {
+      lines.push(`Outros: ${otherHolistic}.`);
+    } else if (holistic.includes("Outros")) {
+      lines.push("Outros tratamentos também foram indicados.");
+    }
+
+    if (therapyDetail) {
+      lines.push(`Observações e especificações terapêuticas: ${therapyDetail}`);
+    }
+
     addReportSection(report, 6, "Outros tratamentos holísticos", lines);
   }
 
@@ -1483,6 +1499,8 @@ function buildVisualReport() {
   const selectedAwakeningData = getCheckedValues("despertar").map((item) => getGraphInfo(item, "Despertar"));
   const allGraphData = [...selectedGraphData, ...selectedAwakeningData];
   const holistic = getCheckedValues("tratamento_holistico");
+  const otherHolistic = getFormValue("outro_tratamento_holistico");
+  const namedHolistic = holistic.filter((item) => item !== "Outros");
   const therapyDetail = getFormValue("detalhamento_terapeutica");
   const notes = getFormValue("observacoes");
   const intention = getFormValue("comando");
@@ -1643,8 +1661,14 @@ function buildVisualReport() {
         ${bovisTable}
         <h4>Campo e limite identificados</h4>
         <p><strong>Campo:</strong> ${escapeHtml(fieldLabel)} | <strong>Tipo de limite:</strong> ${escapeHtml(limitLabel)}</p>
-        ${holistic.length ? `<div class="report-detail-block"><h4>Outros tratamentos holísticos</h4><p>${escapeHtml(holistic.join(", "))}</p></div>` : ""}
-        ${therapyDetail ? `<div class="report-detail-block"><h4>Detalhamento terapêutico</h4><p class="multiline-text">${escapeHtml(therapyDetail)}</p></div>` : ""}
+        ${(namedHolistic.length || otherHolistic || holistic.includes("Outros")) ? `
+          <div class="report-detail-block">
+            <h4>Outros tratamentos holísticos</h4>
+            ${namedHolistic.length ? `<p>${escapeHtml(namedHolistic.join(", "))}</p>` : ""}
+            ${otherHolistic ? `<p><strong>Outros:</strong> ${escapeHtml(otherHolistic)}</p>` : holistic.includes("Outros") ? `<p>Outros tratamentos também foram indicados.</p>` : ""}
+          </div>
+        ` : ""}
+        ${therapyDetail ? `<div class="report-detail-block"><h4>Observações e especificações terapêuticas</h4><p class="multiline-text">${escapeHtml(therapyDetail)}</p></div>` : ""}
         ${intention ? `<div class="report-detail-block"><h4>Comando / intenção</h4><p class="multiline-text">${escapeHtml(intention)}</p></div>` : ""}
         ${notes ? `<div class="report-detail-block"><h4>Observações</h4><p class="multiline-text">${escapeHtml(notes)}</p></div>` : ""}
       </section>
