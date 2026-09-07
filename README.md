@@ -37,3 +37,9 @@ A linguagem do relatório enquadra a radiestesia como prática integrativa/simb�
 - Relatório visual sem duplicação textual: mantém apenas introdução diagnóstica, títulos e quadros/tabelas.
 - Tarô com descrições ampliadas; a fonte Clube do Tarô aparece uma única vez, abaixo da tabela.
 - A seção **Leitura diagnóstica** aparece antes dos quadros e sintetiza os eixos observados sem repetir todos os itens.
+
+
+## Correção V3.1
+- Corrigida a geração das tabelas do relatório.
+- O botão **Gerar / atualizar relatório** volta a funcionar.
+- O relatório passa a se atualizar automaticamente durante o preenchimento e ao carregar dados salvos.

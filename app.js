@@ -94,7 +94,18 @@ function bovisSummary(){
   return rows;
 }
 
-function reportTable(title,rows){if(!rows.length)return "";return `<section><h3>${escapeHtml(title)}</h3><table class="report-table"><thead><tr><th>Item</th><th>Descrição / indicação</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${escapeHtml(r[0])}</td><td>${escapeHtml(r[1])}</td></tr>`).join("")}</tbody></table></section>`;}
+function htmlTable(title, rows){
+  if(!rows || !rows.length) return "";
+  return `<section class="report-table-section">
+    <h3>${escapeHtml(title)}</h3>
+    <div class="table-wrap">
+      <table class="report-table">
+        <thead><tr><th>Item</th><th>Descrição / indicação</th></tr></thead>
+        <tbody>${rows.map(r=>`<tr><td>${escapeHtml(r.name ?? r[0] ?? "")}</td><td>${escapeHtml(r.description ?? r[1] ?? "")}</td></tr>`).join("")}</tbody>
+      </table>
+    </div>
+  </section>`;
+}
 function diagnosisIntro(){
   const activeParts=[];
   parts.forEach((p,idx)=>{
@@ -234,5 +245,21 @@ $("loadDataFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)
 $("clearForm").addEventListener("click",clearAll);
 $("clearFormBottom").addEventListener("click",clearAll);
 loadLocal();
+try { generateReport(); } catch (error) { console.error("Erro ao gerar relatório inicial:", error); }
+
+
+let reportUpdateTimer;
+function scheduleReportUpdate(){
+  clearTimeout(reportUpdateTimer);
+  reportUpdateTimer = setTimeout(() => {
+    try {
+      generateReport();
+    } catch (error) {
+      console.error("Erro ao atualizar o relatório SOLAR:", error);
+    }
+  }, 180);
+}
+document.getElementById("sessionForm").addEventListener("input", scheduleReportUpdate);
+document.getElementById("sessionForm").addEventListener("change", scheduleReportUpdate);
 
 let solarDirty=false;function markAutosaved(){solarDirty=false;const e=$("autosaveStatus");if(e)e.textContent=`Salvo automaticamente às ${new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}`;}document.getElementById("sessionForm").addEventListener("input",()=>{solarDirty=true;saveLocal();markAutosaved();});window.addEventListener("beforeunload",e=>{if(solarDirty){e.preventDefault();e.returnValue="";}});$("endSession")?.addEventListener("click",()=>{if(confirm("Deseja baixar uma cópia dos dados antes de encerrar esta sessão?")){downloadData();setTimeout(()=>{if(confirm("Deseja limpar o formulário desta sessão agora?"))clearAll()},250)}else if(confirm("Deseja encerrar e limpar sem baixar uma cópia?"))clearAll();});
