@@ -96,12 +96,13 @@ function bovisSummary(){
 
 function htmlTable(title, rows){
   if(!rows || !rows.length) return "";
-  return `<section class="report-table-section">
-    <h3>${escapeHtml(title)}</h3>
-    <div class="table-wrap">
+  const body = rows.map(r => `<tr><td>${escapeHtml(r[0] ?? "")}</td><td>${escapeHtml(r[1] ?? "")}</td></tr>`).join("");
+  return `<section class="report-card report-table-card">
+    <div class="report-card-title">${escapeHtml(title)}</div>
+    <div class="report-table-wrap">
       <table class="report-table">
         <thead><tr><th>Item</th><th>Descrição / indicação</th></tr></thead>
-        <tbody>${rows.map(r=>`<tr><td>${escapeHtml(r.name ?? r[0] ?? "")}</td><td>${escapeHtml(r.description ?? r[1] ?? "")}</td></tr>`).join("")}</tbody>
+        <tbody>${body}</tbody>
       </table>
     </div>
   </section>`;
@@ -145,6 +146,43 @@ function diagnosticDescription(partNumber,item){
   if(partNumber===5) return `No paradigma radiestésico, registra ${item.toLowerCase()} como estrutura ou influência sutil pesquisada em associação à manutenção do vínculo.`;
   if(partNumber===6) return `Identifica ${item.toLowerCase()} como possível barreira à disponibilidade afetiva, relacionada à autoproteção, ao apego residual, à comparação ou à insegurança diante de novos vínculos.`;
   return "Aspecto identificado durante a leitura radiestésica da sessão.";
+}
+
+
+const graphDescriptionAliases = {
+  "Anti-Magia":"Antimagia",
+  "Antimagia":"Antimagia",
+  "Desembaraçador de Relacionamentos":"Desembaraçador de relacionamentos",
+  "Desembaraçador Material":"Desembaraçador material",
+  "Harmonia Familiar":"Harmonia familiar",
+  "Nove Círculos":"Nove círculos",
+  "Escudo Protetor":"Escudo protetor",
+  "Alta Vitalidade":"Alta vitalidade",
+  "Turbilhão com Vênus":"Turbilhão de Vênus",
+  "Turbilhão com Mercúrio":"Turbilhão de Mercúrio",
+  "Shin":"Shin",
+  "Flor da Vida":"Flor da vida"
+};
+function graphReportDescription(name){
+  const key = graphDescriptionAliases[name] || name;
+  return graphDescriptions[key] || (typeof supplementalGraphDescriptions !== "undefined" ? supplementalGraphDescriptions[name] : "") || "Gráfico selecionado na leitura radiestésica da sessão.";
+}
+
+
+function reportListCard(title, items){
+  if(!items || !items.length) return "";
+  const rows = items.map(item => {
+    const label = typeof item === "string" ? item : (item.item || item.label || item.name || "");
+    const desc = typeof item === "string" ? "" : (item.description || item.desc || "");
+    return `<div class="report-list-row">
+      <div class="report-list-item">${escapeHtml(label)}</div>
+      ${desc ? `<div class="report-list-desc">${escapeHtml(desc)}</div>` : ""}
+    </div>`;
+  }).join("");
+  return `<section class="report-card report-card-single">
+    <div class="report-card-title">${escapeHtml(title)}</div>
+    <div class="report-list">${rows}</div>
+  </section>`;
 }
 
 function generateReport(){
@@ -242,7 +280,7 @@ function generateReport(){
       name:x,
       description:bachDescriptions[x] || "Floral selecionado na leitura."
     }));
-    visual.push(`<section class="treatment-block">${htmlTable("Florais de Bach",floralRows)}<p class="report-source"><strong>Base de referência:</strong> quadro de indicações dos Florais de Bach fornecido para o protocolo SOLAR; descrições sintetizadas a partir dos sintomas e efeitos positivos apresentados no material.</p></section>`);
+    visual.push(`<section class="treatment-block">${htmlTable("Florais de Bach",floralRows)}</section>`);
   }
 
   const oilRows=o.map(x=>({
@@ -253,7 +291,7 @@ function generateReport(){
     oilRows.push({name:"Outro",description:val("outro_oleo")});
   }
   if(oilRows.length){
-    visual.push(`<section class="treatment-block">${htmlTable("Aromaterapia",oilRows)}<p class="report-source"><strong>Base de referência:</strong> guias de óleos essenciais fornecidos para o protocolo SOLAR, complementados por literatura científica para Anis-estrelado, Pimenta-rosa, Grapefruit, Manjericão, Erva-doce/Funcho e identificação botânica do Pinho-silvestre. As descrições são sínteses informativas de aromaterapia e não constituem indicação médica.</p></section>`);
+    visual.push(`<section class="treatment-block">${htmlTable("Aromaterapia",oilRows)}</section>`);
   }
 
   if(tarot.length){
@@ -262,7 +300,7 @@ function generateReport(){
       description:tarotDescriptions[x] || "Arcano selecionado."
     }));
     visual.push(`<section class="treatment-block">${htmlTable("Tarô — Arcanos Maiores",tarotRows)}
-      <p class="report-source"><strong>Fonte interpretativa:</strong> ${escapeHtml(tarotSource)}. Descrições sintetizadas e adaptadas para o contexto do relatório SOLAR.</p>
+      
     </section>`);
   }
 

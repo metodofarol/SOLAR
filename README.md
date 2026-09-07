@@ -88,3 +88,12 @@ O relatório passa a explicar chakras, eixos ativos e cada item diagnóstico das
 - Nomes botânicos adicionados para reduzir ambiguidades.
 - Descrições dos óleos ausentes nos guias originais foram complementadas com literatura científica e linguagem conservadora.
 - O relatório continua exibindo apenas os óleos efetivamente marcados.
+
+
+## V3.8 — descrições dos gráficos no relatório
+- Banco de dados dos gráficos atualizado com as descrições fornecidas para o método.
+- Cada gráfico marcado no formulário gera sua própria descrição no relatório.
+- A descrição reúne “Atuação” e “Uso no protocolo”.
+- Gráficos não marcados não aparecem no relatório.
+- Código 21 e Chama Trina preservam explicitamente a referência ao Método RAI.
+- Yoshua preserva a definição adotada no método para limpeza de obsessões e influências espirituais.

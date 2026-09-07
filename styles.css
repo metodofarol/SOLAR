@@ -42,3 +42,146 @@ button,input,textarea,select{font:inherit}.page-shell{width:min(1120px,calc(100%
   font-size:9.5pt;
   line-height:1.4;
 }
+
+
+/* ===== SOLAR V3.9 — refinamento visual do relatório ===== */
+.report-output{
+  font-family: "Arial Narrow", Arial, sans-serif;
+  color:#2f3432;
+  background:#fbfcfa;
+  line-height:1.45;
+}
+.report-output h2,
+.report-output h3{
+  color:#315f50;
+}
+.report-output > p{
+  margin:8px 0 12px;
+}
+
+.report-card,
+.treatment-block{
+  margin:14px 0 18px;
+  border:1px solid #d7e2dc;
+  border-radius:12px;
+  background:#fff;
+  overflow:hidden;
+  box-shadow:0 3px 10px rgba(42,70,59,.07);
+}
+
+.report-card-title,
+.treatment-block > h3:first-child{
+  margin:0;
+  padding:10px 14px;
+  background:linear-gradient(90deg,#dfece6 0%,#edf4f1 100%);
+  color:#2d594b;
+  font-size:1.02rem;
+  font-weight:700;
+  letter-spacing:.1px;
+  border-bottom:1px solid #cfddd6;
+}
+
+.report-table-wrap{
+  width:100%;
+  overflow-x:auto;
+}
+
+.report-table,
+.report-card table,
+.treatment-block table{
+  width:100%;
+  border-collapse:collapse;
+  margin:0;
+  background:#fff;
+}
+
+.report-table thead th,
+.report-card table thead th,
+.treatment-block table thead th{
+  background:#f3f7f5;
+  color:#47675c;
+  font-weight:700;
+  text-align:left;
+  padding:9px 12px;
+  border-bottom:1px solid #dce7e1;
+}
+
+.report-table td,
+.report-card table td,
+.treatment-block table td{
+  padding:10px 12px;
+  vertical-align:top;
+  border-bottom:1px solid #edf1ef;
+}
+
+.report-table tbody tr:last-child td,
+.report-card table tbody tr:last-child td,
+.treatment-block table tbody tr:last-child td{
+  border-bottom:none;
+}
+
+.report-table tbody tr:nth-child(even),
+.report-card table tbody tr:nth-child(even),
+.treatment-block table tbody tr:nth-child(even){
+  background:#fbfdfc;
+}
+
+.report-card-single{
+  padding-bottom:2px;
+}
+
+.report-list{
+  padding:4px 0;
+}
+
+.report-list-row{
+  padding:10px 14px;
+  border-bottom:1px solid #edf1ef;
+}
+
+.report-list-row:last-child{
+  border-bottom:none;
+}
+
+.report-list-item{
+  font-weight:700;
+  color:#384b44;
+  margin-bottom:2px;
+}
+
+.report-list-desc{
+  color:#59645f;
+  font-size:.95em;
+}
+
+.report-diagnostic,
+.diagnostic-summary{
+  margin:12px 0 18px;
+  padding:13px 15px;
+  border-left:4px solid #708c7f;
+  border-radius:8px;
+  background:#f3f7f5;
+  color:#34423d;
+}
+
+.report-output .report-source{
+  display:none !important;
+}
+
+/* Destaque vinho apenas para pequenos marcadores, sem pesar no relatório */
+.report-output strong{
+  color:#6f3f4d;
+}
+
+/* Impressão mais limpa */
+@media print{
+  .report-card,
+  .treatment-block{
+    box-shadow:none;
+    break-inside:avoid;
+  }
+  .report-card-title,
+  .treatment-block > h3:first-child{
+    background:#eef3f0 !important;
+  }
+}
