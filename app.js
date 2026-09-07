@@ -82,7 +82,7 @@ function render(){
   $("axisList").innerHTML=axes.map(x=>choice("eixo",x)).join("")+choice("eixo","Outro")+`<label class="field other-detail"><span>Especificar outro</span><input name="outro_eixo"></label>`;
   $("protocolParts").innerHTML=parts.map((p,idx)=>`<details class="section"><summary><h2>${p.n}. ${p.title}</h2></summary>${Object.entries(p.groups).map(([g,items],gidx)=>`<div class="subgroup"><h3>${g}</h3><div class="choice-grid">${[...items,...(items.includes("Outro")?[]:["Outro"])].map(x=>choice("parte_"+(idx+1),x)).join("")}</div><label class="field other-detail"><span>Especificar outro — ${g}</span><input name="outro_parte_${idx+1}_${gidx}"></label></div>`).join("")}</details>`).join("");
   $("holisticList").innerHTML=holistic.map(x=>choice("tratamento_holistico",x)).join("");
-  $("bachGroups").innerHTML=Object.entries(bachGroups).map(([g,items],i)=>`<div class="subgroup"><h3>${g}</h3><div class="choice-grid">${items.map(x=>choice("floral_bach",x)).join("")}${choice("floral_bach","Outro")}</div><label class="field other-detail"><span>Especificar outro — ${g}</span><input name="outro_floral_${i}"></label></div>`).join(""); $("oilList").innerHTML=oils.map(x=>choice("oleo",x)).join(""); $("tarotList").innerHTML=tarotCards.map(x=>choice("taro",x)).join("");
+  $("bachGroups").innerHTML=Object.entries(bachGroups).map(([g,items])=>`<div class="subgroup"><h3>${g}</h3><div class="choice-grid">${items.map(x=>choice("floral_bach",x)).join("")}</div></div>`).join(""); $("oilList").innerHTML=oils.map(x=>choice("oleo",x)).join(""); $("tarotList").innerHTML=tarotCards.map(x=>choice("taro",x)).join("");
 }
 
 function bovisSummary(){
@@ -106,6 +106,21 @@ function htmlTable(title, rows){
     </div>
   </section>`;
 }
+
+function collectOtherPart(idx,p){
+  const rows=[];
+  Object.keys(p.groups).forEach((groupName,gidx)=>{
+    const detail=val(`outro_parte_${idx+1}_${gidx}`);
+    if(detail){
+      rows.push({
+        name:`Outro — ${groupName}`,
+        description: detail
+      });
+    }
+  });
+  return rows;
+}
+
 function diagnosisIntro(){
   const activeParts=[];
   parts.forEach((p,idx)=>{
@@ -119,7 +134,7 @@ function diagnosisIntro(){
 }
 
 function generateReport(){
-  const text = diagnosisIntro();
+  const diagnosisText = diagnosisIntro();
   const b=bovisSummary();
   const c=checked("chakra");
   const e=checked("eixo");
@@ -127,82 +142,147 @@ function generateReport(){
   const florais=checked("floral_bach");
   const o=checked("oleo").filter(x=>x!=="Outro");
   const tarot=checked("taro").filter(x=>x!=="Outro");
-  $("integrativeReport").value=text;
+
+  $("integrativeReport").value=diagnosisText;
 
   const visual=[];
   visual.push(`<article class="visual-report"><header class="report-header"><h2>SOLAR</h2><p class="subtitle">Sistema de observação, limpeza e alinhamento pela radiestesia</p></header>`);
 
-  if(val("nome")||val("sessao")||val("queixas")) visual.push(htmlTable("Identificação",[
-    ...(val("nome")?[{name:"Cliente",description:val("nome")}]:[]),
-    ...(val("nascimento")?[{name:"Data de nascimento",description:fmtDate(val("nascimento"))}]:[]),
-    ...(val("sessao")?[{name:"Data da sessão",description:fmtDate(val("sessao"))}]:[]),
-    ...(val("queixas")?[{name:"Queixas / tema",description:val("queixas")}]:[])
-  ]));
+  if(val("nome")||val("nascimento")||val("sessao")||val("queixas")){
+    visual.push(htmlTable("Identificação",[
+      ...(val("nome")?[{name:"Cliente",description:val("nome")}]:[]),
+      ...(val("nascimento")?[{name:"Data de nascimento",description:fmtDate(val("nascimento"))}]:[]),
+      ...(val("sessao")?[{name:"Data da sessão",description:fmtDate(val("sessao"))}]:[]),
+      ...(val("queixas")?[{name:"Queixas / tema",description:val("queixas")}]:[])
+    ]));
+  }
 
-  visual.push(`<section class="diagnosis-intro"><h3>Leitura diagnóstica</h3><p>${escapeHtml(diagnosisIntro())}</p></section>`);
+  visual.push(`<section class="diagnosis-intro"><h3>Leitura diagnóstica</h3><p>${escapeHtml(diagnosisText)}</p></section>`);
 
-  if(b.length) visual.push(htmlTable("Biômetro de Bovis",b.map(x=>({name:x.split(":")[0],description:x.substring(x.indexOf(":")+1).trim()}))));
+  if(b.length){
+    visual.push(htmlTable("Biômetro de Bovis",b.map(x=>({
+      name:x.split(":")[0],
+      description:x.substring(x.indexOf(":")+1).trim()
+    }))));
+  }
 
-  if(c.length||val("outro_chakra")) visual.push(htmlTable("Chakras envolvidos",[
-    ...c.filter(x=>x!=="Outro").map(x=>({name:x,description:"Identificado como envolvido na leitura radiestésica da sessão."})),
-    ...(val("outro_chakra")?[{name:"Outro",description:val("outro_chakra")}]:[])
-  ]));
+  if(c.length||val("outro_chakra")){
+    visual.push(htmlTable("Chakras envolvidos",[
+      ...c.filter(x=>x!=="Outro").map(x=>({name:x,description:"Identificado como envolvido na leitura radiestésica da sessão."})),
+      ...(val("outro_chakra")?[{name:"Outro",description:val("outro_chakra")}]:[])
+    ]));
+  }
 
-  if(e.length||val("outro_eixo")) visual.push(htmlTable("Eixos ativos",[
-    ...e.filter(x=>x!=="Outro").map(x=>({name:x,description:"Eixo identificado como ativo na leitura radiestésica da sessão."})),
-    ...(val("outro_eixo")?[{name:"Outro",description:val("outro_eixo")}]:[])
-  ]));
+  if(e.length||val("outro_eixo")){
+    visual.push(htmlTable("Eixos ativos",[
+      ...e.filter(x=>x!=="Outro").map(x=>({name:x,description:"Eixo identificado como ativo na leitura radiestésica da sessão."})),
+      ...(val("outro_eixo")?[{name:"Outro",description:val("outro_eixo")}]:[])
+    ]));
+  }
 
-  parts.forEach((p,idx)=>{
+  // DIAGNÓSTICOS — somente Partes 1 a 6.
+  parts.slice(0,6).forEach((p,idx)=>{
     const arr=checked("parte_"+(idx+1)).filter(x=>x!=="Outro");
-    const rows=arr.map(x=>({name:x,description:idx===6?(graphDescriptions[x]||"Gráfico selecionado como recurso de tratamento dentro do protocolo radiestésico SOLAR."):"Aspecto identificado durante a leitura radiestésica da sessão."}));
+    const rows=arr.map(x=>({
+      name:x,
+      description:"Aspecto identificado durante a leitura radiestésica da sessão."
+    }));
     rows.push(...collectOtherPart(idx,p));
-    if(rows.length) visual.push(htmlTable(p.title,rows));
+    if(rows.length){
+      visual.push(htmlTable(p.title,rows));
+    }
   });
 
+  // TRATAMENTOS — quadros editoriais preservados.
+  const treatmentPart=parts[6];
+  const graphItems=checked("parte_7").filter(x=>x!=="Outro");
+  const graphRows=graphItems.map(x=>({
+    name:x,
+    description:graphDescriptions[x] || "Gráfico selecionado como recurso de tratamento dentro do protocolo radiestésico SOLAR."
+  }));
+  graphRows.push(...collectOtherPart(6,treatmentPart));
+  if(graphRows.length){
+    visual.push(`<section class="treatment-block">${htmlTable("Parte 7 — Tratamento com geometrias sagradas",graphRows)}</section>`);
+  }
+
   const namedHol=checked("tratamento_holistico").filter(x=>x!=="Outros");
-  const holRows=namedHol.map(x=>({name:x,description:"Tratamento complementar identificado na leitura."}));
-  if(val("outro_tratamento_holistico"))holRows.push({name:"Outro",description:val("outro_tratamento_holistico")});
-  if(holRows.length)visual.push(htmlTable("Outros tratamentos holísticos",holRows));
+  const holRows=namedHol.map(x=>({
+    name:x,
+    description:"Tratamento complementar identificado na leitura."
+  }));
+  if(val("outro_tratamento_holistico")){
+    holRows.push({name:"Outro",description:val("outro_tratamento_holistico")});
+  }
+  if(holRows.length){
+    visual.push(`<section class="treatment-block">${htmlTable("Outros tratamentos holísticos",holRows)}</section>`);
+  }
+
   if(val("quantidade_sessoes")||val("periodicidade")||det){
     const specs=[];
     if(val("quantidade_sessoes")) specs.push({name:"Quantidade de sessões",description:val("quantidade_sessoes")});
     if(val("periodicidade")) specs.push({name:"Periodicidade",description:val("periodicidade")});
     if(det) specs.push({name:"Observações e especificações",description:det});
-    visual.push(htmlTable("Especificações terapêuticas",specs));
+    visual.push(`<section class="treatment-block">${htmlTable("Especificações terapêuticas",specs)}</section>`);
   }
 
   if(florais.length){
-    const floralRows=florais.map(x=>({name:x,description:bachDescriptions[x]||"Floral selecionado na leitura."}));
-    visual.push(htmlTable("Florais de Bach",floralRows));
+    const floralRows=florais.map(x=>({
+      name:x,
+      description:bachDescriptions[x] || "Floral selecionado na leitura."
+    }));
+    visual.push(`<section class="treatment-block">${htmlTable("Florais de Bach",floralRows)}</section>`);
   }
 
-  const oilRows=o.map(x=>({name:x,description:oilDescriptions[x]||"Óleo essencial selecionado."}));
-  if(val("outro_oleo"))oilRows.push({name:"Outro",description:val("outro_oleo")});
-  if(oilRows.length)visual.push(htmlTable("Aromaterapia",oilRows));
+  const oilRows=o.map(x=>({
+    name:x,
+    description:oilDescriptions[x] || "Óleo essencial selecionado."
+  }));
+  if(val("outro_oleo")){
+    oilRows.push({name:"Outro",description:val("outro_oleo")});
+  }
+  if(oilRows.length){
+    visual.push(`<section class="treatment-block">${htmlTable("Aromaterapia",oilRows)}</section>`);
+  }
 
   if(tarot.length||val("outro_taro")){
-    const tarotRows=tarot.map(x=>({name:x,description:tarotDescriptions[x]||"Arcano selecionado."}));
-    if(val("outro_taro"))tarotRows.push({name:"Outro / observação",description:val("outro_taro")});
-    visual.push(htmlTable("Tarô — Arcanos Maiores",tarotRows));
-    visual.push(`<p class="report-source"><strong>Fonte das descrições do Tarô:</strong> Clube do Tarô. Síntese elaborada a partir de conteúdos interpretativos do portal, especialmente os textos sobre dinâmica, tempo, escolhas e significados dos Arcanos Maiores. ${escapeHtml(tarotSource.replace("Clube do Tarô — ",""))}</p>`);
+    const tarotRows=tarot.map(x=>({
+      name:x,
+      description:tarotDescriptions[x] || "Arcano selecionado."
+    }));
+    if(val("outro_taro")){
+      tarotRows.push({name:"Outro / observação",description:val("outro_taro")});
+    }
+    visual.push(`<section class="treatment-block">${htmlTable("Tarô — Arcanos Maiores",tarotRows)}
+      <p class="report-source"><strong>Fonte das descrições do Tarô:</strong> Clube do Tarô. Síntese elaborada a partir de conteúdos interpretativos do portal. ${escapeHtml(tarotSource.replace("Clube do Tarô — ",""))}</p>
+    </section>`);
   }
 
-  if(val("observacoes_complementares"))visual.push(htmlTable("Observações complementares",[{name:"Registro",description:val("observacoes_complementares")}]))
-  if(val("observacoes"))visual.push(htmlTable("Observações da sessão",[{name:"Registro",description:val("observacoes")}]))
+  if(val("observacoes_complementares")){
+    visual.push(htmlTable("Observações complementares",[
+      {name:"Registro",description:val("observacoes_complementares")}
+    ]));
+  }
+
+  if(val("observacoes")){
+    visual.push(htmlTable("Observações da sessão",[
+      {name:"Registro",description:val("observacoes")}
+    ]));
+  }
+
   if(val("testemunhos")||val("comando")||val("tempo_tratamento")||val("nova_afericao")){
     const rows=[];
-    if(val("testemunhos"))rows.push({name:"Testemunho(s) utilizado(s)",description:val("testemunhos")});
-    if(val("comando"))rows.push({name:"Comando / intenção",description:val("comando")});
-    if(val("tempo_tratamento"))rows.push({name:"Tempo de permanência / tratamento",description:val("tempo_tratamento")});
-    if(val("nova_afericao"))rows.push({name:"Nova aferição",description:fmtDate(val("nova_afericao"))});
+    if(val("testemunhos")) rows.push({name:"Testemunho(s) utilizado(s)",description:val("testemunhos")});
+    if(val("comando")) rows.push({name:"Comando / intenção",description:val("comando")});
+    if(val("tempo_tratamento")) rows.push({name:"Tempo de permanência / tratamento",description:val("tempo_tratamento")});
+    if(val("nova_afericao")) rows.push({name:"Nova aferição",description:fmtDate(val("nova_afericao"))});
     visual.push(htmlTable("Registro da sessão",rows));
   }
 
   visual.push(`<section class="report-note"><h3>Orientação</h3><p>A radiestesia, no contexto do SOLAR, é apresentada como prática integrativa de observação e organização simbólica/energética. Os achados deste relatório registram a leitura realizada na sessão e não constituem diagnóstico médico ou psicológico. O atendimento não substitui avaliação, acompanhamento ou tratamento médico, psicológico, psiquiátrico ou de outros profissionais de saúde quando necessários.</p><p>Se fizer sentido para o seu processo, a leitura pode ser retomada em sessões posteriores para acompanhar os aspectos observados e os recursos selecionados. Também podem ser considerados, de forma complementar e conforme sua escolha, atendimentos de Reiki e Tarô.</p><p><strong>Rodrigo Bittencourt</strong><br>SOLAR — Sistema de observação, limpeza e alinhamento pela radiestesia</p></section></article>`);
+
   $("reportVisualView").innerHTML=visual.join("");
   saveLocal();
-  return text;
+  return diagnosisText;
 }
 
 function collect(){
@@ -220,7 +300,7 @@ function apply(data){
     if(el.type==="checkbox") el.checked=Array.isArray(data[el.name])&&data[el.name].includes(el.value);
     else if(data[el.name]!==undefined) el.value=data[el.name];
   });
-  if(val("relatorio_integrativo")) $("reportVisualView").innerHTML=`<article class="visual-report"><h2>SOLAR</h2><div class="multiline">${escapeHtml(val("relatorio_integrativo"))}</div></article>`;
+  try { generateReport(); } catch (error) { console.error("Erro ao reconstruir relatório:", error); }
 }
 function saveLocal(){localStorage.setItem("solar_form_data",JSON.stringify(collect()));}
 function loadLocal(){const raw=localStorage.getItem("solar_form_data");if(raw)apply(JSON.parse(raw));}

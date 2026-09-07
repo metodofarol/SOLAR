@@ -15,3 +15,30 @@ button,input,textarea,select{font:inherit}.page-shell{width:min(1120px,calc(100%
 .autosave-status{align-self:center;color:var(--muted);font-size:10px;white-space:nowrap}.other-detail{margin-top:8px;padding:9px;border-left:3px solid var(--green2);background:#fff}.report-table{width:100%;border-collapse:collapse;background:#fff;margin:8px 0 18px}.report-table th,.report-table td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.report-table th{background:var(--green2);color:var(--green)}.report-table th:first-child,.report-table td:first-child{width:31%;font-weight:700}.report-note{margin-top:18px;padding:14px;border-left:5px solid var(--green);background:var(--soft)}@media print{.report-table{font-size:9.5pt}.report-table tr{break-inside:avoid}}
 
 .diagnosis-intro{margin:18px 0;padding:16px 18px;border:1px solid var(--line);border-left:5px solid var(--wine);background:#fff}.diagnosis-intro h3{margin:0 0 8px;color:var(--wine);font-size:15px}.diagnosis-intro p{margin:0;line-height:1.6}.report-source{margin:7px 2px 18px;color:var(--muted);font-size:9.5pt;line-height:1.45}.report-header{margin-bottom:8px}.report-table td:nth-child(2){line-height:1.55}
+
+.treatment-block{
+  margin-top:18px;
+  padding:12px 14px 14px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:linear-gradient(180deg,#fff 0%,#fbfcfb 100%);
+  box-shadow:0 4px 14px rgba(34,48,45,.05);
+}
+.treatment-block .report-table-section{margin-top:0}
+.treatment-block .report-table-section h3{
+  margin:0 0 10px;
+  padding:8px 10px;
+  border-radius:7px;
+  background:var(--green2);
+  color:var(--green);
+  border-left:5px solid var(--green);
+}
+.treatment-block .report-table th{
+  background:#f2f7f5;
+}
+.report-source{
+  margin:8px 2px 0;
+  color:var(--muted);
+  font-size:9.5pt;
+  line-height:1.4;
+}

@@ -43,3 +43,11 @@ A linguagem do relatório enquadra a radiestesia como prática integrativa/simb�
 - Corrigida a geração das tabelas do relatório.
 - O botão **Gerar / atualizar relatório** volta a funcionar.
 - O relatório passa a se atualizar automaticamente durante o preenchimento e ao carregar dados salvos.
+
+
+## Correção V3.2
+- Corrigida a função ausente que impedia as Partes 1–6 de aparecerem no relatório.
+- O relatório agora é organizado explicitamente em **diagnósticos (Partes 1–6)** e **tratamentos (Parte 7 e terapias complementares)**.
+- Mantidos e reforçados os quadros editoriais dos tratamentos.
+- Florais de Bach agora são um sistema fechado: removidas todas as opções e campos “Outro”.
+- O relatório continua sem repetição textual anterior aos quadros.
