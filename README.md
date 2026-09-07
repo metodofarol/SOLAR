@@ -30,3 +30,10 @@ Se o Vercel estiver conectado à branch principal desse repositório, um novo co
 
 ## Observação
 A linguagem do relatório enquadra a radiestesia como prática integrativa/simbólica e não como diagnóstico médico ou psicológico.
+
+
+## Revisão editorial do relatório
+- Florais de Bach tratados como sistema fechado: removida a opção **Outro**.
+- Relatório visual sem duplicação textual: mantém apenas introdução diagnóstica, títulos e quadros/tabelas.
+- Tarô com descrições ampliadas; a fonte Clube do Tarô aparece uma única vez, abaixo da tabela.
+- A seção **Leitura diagnóstica** aparece antes dos quadros e sintetiza os eixos observados sem repetir todos os itens.

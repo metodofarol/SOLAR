@@ -80,7 +80,7 @@
         </label>
       </details>
 
-      <details class="section"><summary><h2>13. Florais de Bach</h2></summary><p class="hint">Organização conforme o biômetro fornecido.</p><div id="bachGroups"></div></details>
+      <details class="section"><summary><h2>13. Florais de Bach</h2></summary><p class="hint">Sistema fechado de 38 essências, organizado conforme o biômetro fornecido.</p><div id="bachGroups"></div></details>
       <details class="section"><summary><h2>14. Aromaterapia</h2></summary><p class="hint">Selecione os óleos indicados; o relatório apresentará uma indicação resumida.</p><div id="oilList" class="choice-grid choice-grid-wide"></div><label class="field therapy-detail"><span>Outro óleo / especificação</span><input type="text" name="outro_oleo"></label></details>
       <details class="section"><summary><h2>15. Tarô — Arcanos Maiores</h2></summary><p class="hint">Os arcanos selecionados recebem resumo interpretativo e referência ao Clube do Tarô no relatório.</p><div id="tarotList" class="choice-grid choice-grid-wide"></div><label class="field therapy-detail"><span>Outro / observação sobre o Tarô</span><input type="text" name="outro_taro"></label></details>
       <details class="section"><summary><h2>16. Observações complementares</h2></summary><label class="field"><span>Observações</span><textarea name="observacoes_complementares" rows="7"></textarea></label></details>
@@ -101,7 +101,7 @@
           <button type="button" class="button secondary" id="generateReport">Gerar / atualizar relatório</button>
           <button type="button" class="button primary" id="saveReportPdf">Salvar relatório em PDF</button>
         </div>
-        <label class="field"><span>Relatório gerado — editável</span><textarea id="integrativeReport" name="relatorio_integrativo" rows="24"></textarea></label>
+        <textarea id="integrativeReport" name="relatorio_integrativo" hidden></textarea>
         <div id="reportVisualView" class="report-visual-view"></div>
       </details>
 
