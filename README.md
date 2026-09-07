@@ -97,3 +97,9 @@ O relatório passa a explicar chakras, eixos ativos e cada item diagnóstico das
 - Gráficos não marcados não aparecem no relatório.
 - Código 21 e Chama Trina preservam explicitamente a referência ao Método RAI.
 - Yoshua preserva a definição adotada no método para limpeza de obsessões e influências espirituais.
+
+## V3.9.2 — correção funcional crítica
+- Corrigido conflito JavaScript entre `catalogos.js` e `app.js`.
+- O conflito impedia `render()` de executar no navegador e, por isso, os campos dinâmicos do formulário ficavam vazios.
+- Restaurada a renderização dos campos de Bovis, Chakras, Eixos, Partes 1–7, tratamentos holísticos, Florais, Aromaterapia e Tarô.
+- Mantidas as melhorias do relatório e as descrições dos gráficos.

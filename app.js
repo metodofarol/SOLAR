@@ -48,23 +48,6 @@ const parts = [
 const holistic = ["Reiki","Florais de Bach","Meditação / Yoga","Apometria","Mesa Radiônica","Tarot Terapêutico","Radiestesia Terapêutica","Banhos","Ho’oponopono","Mantras / Afirmações","Subliminal","Musicoterapia","Barra de Access","Acupuntura","Cromoterapia","ThetaHealing","Aromaterapia","Ecoterapia","Hipnoterapia","Fitoterapia","Constelação Familiar","Quiropraxia","Outros"];
 const oils = ["Gerânio (Pelargonium graveolens)", "Bergamota (Citrus bergamia)", "Alecrim (Rosmarinus officinalis)", "Rosa", "Melaleuca / Tea Tree (Melaleuca alternifolia)", "Lavanda (Lavandula angustifolia)", "Sálvia Esclareia (Salvia sclarea)", "Canela", "Anis-estrelado (Illicium verum)", "Laranja Doce (Citrus sinensis)", "Ylang Ylang (Cananga odorata)", "Cedro", "Pimenta-rosa (Schinus terebinthifolia)", "Olíbano / Frankincense (Boswellia carterii)", "Hortelã-Pimenta (Mentha piperita)", "Limão Siciliano (Citrus limon)", "Eucalipto (Eucalyptus globulus)", "Camomila Romana (Chamaemelum nobile)", "Sândalo", "Copaíba (Copaifera officinalis)", "Grapefruit (Citrus × paradisi)", "Lemongrass / Capim-Limão (Cymbopogon flexuosus)", "Manjericão (Ocimum basilicum)", "Patchouli (Pogostemon cablin)", "Tomilho (Thymus vulgaris)", "Erva-doce / Funcho (Foeniculum vulgare)", "Pinho-silvestre (Pinus sylvestris)", "Gengibre (Zingiber officinale)", "Jasmim", "Vetiver", "Outro"];
 
-const graphDescriptions = {
-  "Yoshua":"No método SOLAR, é utilizado como recurso de limpeza voltado a influências obsessivas no campo sutil, dentro do paradigma radiestésico.",
-  "Código 21":"No método SOLAR, é empregado com a intenção de limpar, desbloquear e purificar registros deformados, trabalhando simbolicamente traumas, bloqueios e medos.",
-  "Chama Trina":"No método SOLAR, é utilizada com a intenção de fortalecer, conectar e purificar, favorecendo uma nova visão orientada pelo amor, pela verdade, pelo belo e pelo bom, especialmente diante de medo, opressão, sensação de falta de saída e traumas.",
-  "Desembaraçador de relacionamentos":"Selecionado como apoio radiestésico para trabalhar simbolicamente emaranhamentos e vínculos relacionais que se pretende reorganizar ou liberar.",
-  "Desembaraçador material":"Selecionado como apoio radiestésico para questões percebidas como emaranhadas no plano material.",
-  "Desimpregnador":"Selecionado com a intenção radiestésica de limpeza de impregnações e resíduos energéticos.",
-  "Escudo protetor":"Selecionado com intenção de proteção e estabilização do campo dentro da prática radiestésica.",
-  "Harmonia":"Selecionado para favorecer simbolicamente harmonização e equilíbrio do campo.",
-  "Harmonia familiar":"Selecionado para favorecer simbolicamente harmonização de dinâmicas familiares.",
-  "Autoestima 5.7.3":"Selecionado como apoio ao trabalho radiestésico relacionado à autoestima.",
-  "Antimagia":"Selecionado como recurso simbólico de neutralização/proteção diante de interferências percebidas no paradigma radiestésico.",
-  "Flor da vida":"Geometria selecionada como suporte simbólico de harmonização e organização do campo.",
-  "Vesica Piscis":"Geometria selecionada como suporte simbólico ao alinhamento e à integração.",
-  "Triturador":"Selecionado como recurso radiestésico de desagregação simbólica de padrões ou cargas que se pretende desfazer.",
-  "Alta vitalidade":"Selecionado como apoio radiestésico voltado simbolicamente à vitalidade do campo."
-};
 
 function safeName(s){return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-zA-Z0-9]+/g,"_").replace(/^_|_$/g,"").toLowerCase();}
 function choice(name,value){const id=safeName(name+"_"+value);return `<label class="choice" for="${id}"><input id="${id}" type="checkbox" name="${name}" value="${value}"><span>${value}</span></label>`;}
