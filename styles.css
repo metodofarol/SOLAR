@@ -152,3 +152,35 @@ button,input,textarea,select{font:inherit}.page-shell{width:min(1120px,calc(100%
     page-break-before:always;
   }
 }
+
+
+/* ===== SOLAR V3.9.5 — todos os campos do relatório editáveis ===== */
+.report-editable{
+  min-height:1.1em;
+}
+.report-editable-inline{
+  display:inline-block;
+  min-width:1ch;
+}
+.report-editable-block{
+  display:block;
+  min-height:1.35em;
+  white-space:pre-wrap;
+}
+.report-editable:focus{
+  outline:2px solid #b7cfc3;
+  background:#fffef9;
+}
+.report-editable[contenteditable="true"]:empty::before{
+  content:"Clique para editar";
+  color:#a1aaa5;
+  font-style:italic;
+}
+.report-main-title-edit,
+.report-subtitle-edit,
+.report-section-title-edit{
+  cursor:text;
+}
+@media print{
+  .report-editable[contenteditable="true"]:empty::before{content:"";}
+}

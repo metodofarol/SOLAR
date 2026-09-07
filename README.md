@@ -121,3 +121,11 @@ O relatório passa a explicar chakras, eixos ativos e cada item diagnóstico das
 - O formulário na tela permanece sem a capa.
 - O conteúdo do relatório começa em nova página após a capa.
 - Mantidas as funcionalidades e correções da V3.9.3.
+
+
+## V3.9.5 — relatório totalmente editável
+- Corrigido o bug que fazia o foco sair da edição após digitar uma única letra.
+- O relatório não é mais regenerado enquanto o usuário está digitando em um campo editável.
+- Todos os textos visíveis do relatório passam a permitir edição direta: títulos, cabeçalhos, nomes dos itens, descrições e síntese diagnóstica.
+- As edições são salvas automaticamente no navegador e incluídas no JSON de backup.
+- A impressão/PDF usa o conteúdo que está efetivamente visível e editado no relatório, sem regenerá-lo imediatamente antes de imprimir.

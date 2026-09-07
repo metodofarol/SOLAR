@@ -92,17 +92,34 @@ function saveReportEdits(){
   localStorage.setItem("solar_report_edits", JSON.stringify(reportEditOverrides));
 }
 
+
+function editableReportInline(key,text,cls=""){
+  const value = Object.prototype.hasOwnProperty.call(reportEditOverrides,key) ? reportEditOverrides[key] : (text || "");
+  return `<span class="report-editable report-editable-inline ${cls}" contenteditable="true" spellcheck="true" data-report-edit-key="${escapeHtml(key)}">${escapeHtml(value)}</span>`;
+}
+function editableReportBlock(key,text,cls=""){
+  const value = Object.prototype.hasOwnProperty.call(reportEditOverrides,key) ? reportEditOverrides[key] : (text || "");
+  return `<div class="report-editable report-editable-block ${cls}" contenteditable="true" spellcheck="true" data-report-edit-key="${escapeHtml(key)}">${escapeHtml(value)}</div>`;
+}
+
 function htmlTable(title, rows){
   if(!rows || !rows.length) return "";
+  const titleKey=reportEditKey("section_title",title);
   return `<section class="report-table-section">
-    <h3>${escapeHtml(title)}</h3>
+    <h3>${editableReportInline(titleKey,title,"report-section-title-edit")}</h3>
     <div class="table-wrap">
       <table class="report-table">
-        <thead><tr><th>Item</th><th>Descrição / indicação</th></tr></thead>
+        <thead><tr>
+          <th>${editableReportInline(reportEditKey(title,"header_item"),"Item")}</th>
+          <th>${editableReportInline(reportEditKey(title,"header_description"),"Descrição / indicação")}</th>
+        </tr></thead>
         <tbody>${rows.map(r=>{
           const name = r.name ?? r[0] ?? "";
           const description = r.description ?? r[1] ?? "";
-          return `<tr><td>${escapeHtml(name)}</td><td>${editableReportText(reportEditKey(title,name),description)}</td></tr>`;
+          return `<tr>
+            <td>${editableReportBlock(reportEditKey(title,"item_"+name),name)}</td>
+            <td>${editableReportBlock(reportEditKey(title,name),description)}</td>
+          </tr>`;
         }).join("")}</tbody>
       </table>
     </div>
@@ -113,14 +130,14 @@ function htmlTable(title, rows){
 function htmlSingleColumn(title, rows){
   if(!rows || !rows.length) return "";
   return `<section class="report-single-section">
-    <h3>${escapeHtml(title)}</h3>
+    <h3>${editableReportInline(reportEditKey("section_title",title),title,"report-section-title-edit")}</h3>
     <div class="report-single-list">
       ${rows.map(r=>{
         const name = r.name ?? r[0] ?? "";
         const description = r.description ?? r[1] ?? "";
         return `<div class="report-single-row">
-          <strong>${escapeHtml(name)}</strong>
-          <span>${editableReportText(reportEditKey(title,name),description)}</span>
+          <strong>${editableReportInline(reportEditKey(title,"item_"+name),name)}</strong>
+          ${editableReportBlock(reportEditKey(title,name),description)}
         </div>`;
       }).join("")}
     </div>
@@ -194,7 +211,7 @@ function generateReport(){
   $("integrativeReport").value=diagnosisText;
 
   const visual=[];
-  visual.push(`<article class="visual-report"><header class="report-header"><h2>SOLAR <span class="report-therapist-name">- Rodrigo Bittencourt</span></h2><p class="subtitle">Sistema de observação, limpeza e alinhamento pela radiestesia</p></header>`);
+  visual.push(`<article class="visual-report"><header class="report-header"><h2>${editableReportInline("report_header_title","SOLAR - Rodrigo Bittencourt","report-main-title-edit")}</h2><p class="subtitle">${editableReportInline("report_header_subtitle","Sistema de observação, limpeza e alinhamento pela radiestesia","report-subtitle-edit")}</p></header>`);
 
   if(val("nome")||val("nascimento")||val("sessao")||val("queixas")){
     visual.push(htmlTable("Identificação",[
@@ -205,7 +222,7 @@ function generateReport(){
     ]));
   }
 
-  visual.push(`<section class="diagnosis-intro"><h3>Leitura diagnóstica</h3><p>${editableReportText("diagnosis_intro",diagnosisText)}</p></section>`);
+  visual.push(`<section class="diagnosis-intro"><h3>${editableReportInline("diagnosis_heading","Leitura diagnóstica")}</h3><p>${editableReportBlock("diagnosis_intro",diagnosisText)}</p></section>`);
 
   if(b.length){
     visual.push(htmlTable("Biômetro de Bovis",b.map(x=>({
@@ -306,7 +323,7 @@ function generateReport(){
     ]));
   }
 
-  visual.push(`<section class="report-note"><h3>Orientação</h3><p>A radiestesia, no contexto do SOLAR, é apresentada como prática integrativa de observação e organização simbólica/energética. Os achados deste relatório registram a leitura realizada na sessão e não constituem diagnóstico médico ou psicológico. O atendimento não substitui avaliação, acompanhamento ou tratamento médico, psicológico, psiquiátrico ou de outros profissionais de saúde quando necessários.</p><p>Se fizer sentido para o seu processo, a leitura pode ser retomada em sessões posteriores para acompanhar os aspectos observados e os recursos selecionados. Também podem ser considerados, de forma complementar e conforme sua escolha, atendimentos de Reiki e Tarô.</p><p><strong>Rodrigo Bittencourt</strong><br>SOLAR — Sistema de observação, limpeza e alinhamento pela radiestesia</p></section></article>`);
+  visual.push(`<section class="report-note"><h3>Orientação</h3><p>${editableReportBlock("report_disclaimer","A radiestesia, no contexto do SOLAR, é apresentada como prática integrativa de observação e organização simbólica/energética. Os achados deste relatório registram a leitura realizada na sessão e não constituem diagnóstico médico ou psicológico. O atendimento não substitui avaliação, acompanhamento ou tratamento médico, psicológico, psiquiátrico ou de outros profissionais de saúde quando necessários.")}</p><p>${editableReportBlock("report_invitation","Se fizer sentido para o seu processo, a leitura pode ser retomada em sessões posteriores para acompanhar os aspectos observados e os recursos selecionados. Também podem ser considerados, de forma complementar e conforme sua escolha, atendimentos de Reiki e Tarô.")}</p><p><strong>Rodrigo Bittencourt</strong><br>SOLAR — Sistema de observação, limpeza e alinhamento pela radiestesia</p></section></article>`);
 
   $("reportVisualView").innerHTML=visual.join("");
   saveLocal();
@@ -338,7 +355,15 @@ function downloadData(){
   const blob=new Blob([JSON.stringify(collect(),null,2)],{type:"application/json"});
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`SOLAR_${safeName(val("nome")||"sessao")}.json`;a.click();URL.revokeObjectURL(a.href);
 }
-function printReport(){generateReport();document.body.classList.add("print-report-only");setTimeout(()=>{window.print();document.body.classList.remove("print-report-only");},100);}
+function printReport(){
+  document.querySelectorAll("#reportVisualView [data-report-edit-key]").forEach(el=>{
+    reportEditOverrides[el.dataset.reportEditKey]=el.innerText;
+  });
+  saveReportEdits();
+  localStorage.setItem("solar_form_data",JSON.stringify(collect()));
+  document.body.classList.add("print-report-only");
+  setTimeout(()=>{window.print();document.body.classList.remove("print-report-only");},100);
+}
 function clearAll(){if(confirm("Limpar todos os campos desta sessão?")){document.getElementById("sessionForm").reset();localStorage.removeItem("solar_form_data");localStorage.removeItem("solar_report_edits");reportEditOverrides={};$("reportVisualView").innerHTML="";}}
 
 render();
@@ -349,8 +374,9 @@ $("reportVisualView").addEventListener("input",e=>{
   if(!el) return;
   reportEditOverrides[el.dataset.reportEditKey]=el.innerText;
   saveReportEdits();
-  saveLocal();
-  markAutosaved();
+  localStorage.setItem("solar_form_data",JSON.stringify(collect()));
+  const status=$("autosaveStatus");
+  if(status) status.textContent=`Salvo automaticamente às ${new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}`;
 });
 
 $("generateReport").addEventListener("click",generateReport);
@@ -370,6 +396,7 @@ try { generateReport(); } catch (error) { console.error("Erro ao gerar relatóri
 
 let reportUpdateTimer;
 function scheduleReportUpdate(){
+  if(document.activeElement && document.activeElement.closest && document.activeElement.closest("#reportVisualView")) return;
   clearTimeout(reportUpdateTimer);
   reportUpdateTimer = setTimeout(() => {
     try {
