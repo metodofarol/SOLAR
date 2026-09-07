@@ -51,3 +51,40 @@ A linguagem do relatório enquadra a radiestesia como prática integrativa/simb�
 - Mantidos e reforçados os quadros editoriais dos tratamentos.
 - Florais de Bach agora são um sistema fechado: removidas todas as opções e campos “Outro”.
 - O relatório continua sem repetição textual anterior aos quadros.
+
+
+## V3.3
+Removidos os campos Outro e Especificar outro das seções 3 (Chakras envolvidos) e 4 (Eixos ativos).
+
+
+## V3.4 — descrições
+O relatório passa a explicar chakras, eixos ativos e cada item diagnóstico das Partes 1–6, preservando as descrições específicas dos gráficos e o padrão editorial em tabelas.
+
+
+## V3.5 — integração final do relatório
+- Florais de Bach: cada floral marcado gera linha própria com indicação e potencial positivo, usando a base textual fornecida pelo usuário.
+- Tarô: cada Arcano Maior marcado gera linha própria com descrição interpretativa ampliada, sintetizada a partir de Kira Mayos (2017, p. 14–19).
+- A fonte do Tarô aparece uma única vez abaixo da tabela.
+- O relatório continua condicionado ao que foi efetivamente marcado no formulário.
+- Mantidos diagnósticos, chakras, eixos, gráficos, tratamentos, aromaterapia e observações no padrão editorial de títulos e quadros.
+
+## V3.6 — atualização consolidada
+- Integra todas as correções anteriores do relatório.
+- Florais de Bach: 38 florais, sistema fechado, com indicação e potencial positivo conforme a base fornecida.
+- Tarô: 22 Arcanos Maiores, descrições ampliadas e fonte bibliográfica única abaixo da tabela.
+- Aromaterapia: descrições atualizadas a partir dos guias fornecidos; nomes equivalentes foram normalizados e Melaleuca/Tea Tree foi unificada.
+- Para óleos presentes no formulário mas sem descrição nos documentos fornecidos, o relatório informa que a base não trouxe indicação específica, sem inventar conteúdo.
+- Seção 17 removida do formulário.
+- Mantido salvamento automático e geração seletiva do relatório conforme os itens marcados.
+
+- Correção final V3.6: removido integralmente o antigo **17. Registro da sessão**; o relatório passa a ser a seção 17.
+
+
+## V3.7 — base de Aromaterapia revisada
+- Artemísia removida definitivamente; Lavanda permanece como Lavandula angustifolia.
+- Sálvia comum removida; permanece apenas Sálvia Esclareia (Salvia sclarea).
+- Pinho especificado como Pinho-silvestre (Pinus sylvestris).
+- Tea Tree/Melaleuca unificados em uma única opção.
+- Nomes botânicos adicionados para reduzir ambiguidades.
+- Descrições dos óleos ausentes nos guias originais foram complementadas com literatura científica e linguagem conservadora.
+- O relatório continua exibindo apenas os óleos efetivamente marcados.

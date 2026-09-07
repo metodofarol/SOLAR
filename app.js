@@ -46,7 +46,7 @@ const parts = [
 ];
 
 const holistic = ["Reiki","Florais de Bach","Meditação / Yoga","Apometria","Mesa Radiônica","Tarot Terapêutico","Radiestesia Terapêutica","Banhos","Ho’oponopono","Mantras / Afirmações","Subliminal","Musicoterapia","Barra de Access","Acupuntura","Cromoterapia","ThetaHealing","Aromaterapia","Ecoterapia","Hipnoterapia","Fitoterapia","Constelação Familiar","Quiropraxia","Outros"];
-const oils = ["Gerânio","Bergamota","Alecrim","Rosa","Tea Tree","Lavanda","Esclareia","Canela","Anis Estrelado","Laranja","Ylang Ylang","Cedro","Artemísia","Pimenta Rosa","Olíbano","Hortelã Pimenta","Melaleuca","Limão","Eucalipto","Camomila","Sândalo","Copaíba","Sálvia","Grapefruit","Lemongrass","Manjericão","Patchouli","Tomilho","Erva Doce","Pinho","Gengibre","Jasmim","Vetiver","Outro"];
+const oils = ["Gerânio (Pelargonium graveolens)", "Bergamota (Citrus bergamia)", "Alecrim (Rosmarinus officinalis)", "Rosa", "Melaleuca / Tea Tree (Melaleuca alternifolia)", "Lavanda (Lavandula angustifolia)", "Sálvia Esclareia (Salvia sclarea)", "Canela", "Anis-estrelado (Illicium verum)", "Laranja Doce (Citrus sinensis)", "Ylang Ylang (Cananga odorata)", "Cedro", "Pimenta-rosa (Schinus terebinthifolia)", "Olíbano / Frankincense (Boswellia carterii)", "Hortelã-Pimenta (Mentha piperita)", "Limão Siciliano (Citrus limon)", "Eucalipto (Eucalyptus globulus)", "Camomila Romana (Chamaemelum nobile)", "Sândalo", "Copaíba (Copaifera officinalis)", "Grapefruit (Citrus × paradisi)", "Lemongrass / Capim-Limão (Cymbopogon flexuosus)", "Manjericão (Ocimum basilicum)", "Patchouli (Pogostemon cablin)", "Tomilho (Thymus vulgaris)", "Erva-doce / Funcho (Foeniculum vulgare)", "Pinho-silvestre (Pinus sylvestris)", "Gengibre (Zingiber officinale)", "Jasmim", "Vetiver", "Outro"];
 
 const graphDescriptions = {
   "Yoshua":"No método SOLAR, é utilizado como recurso de limpeza voltado a influências obsessivas no campo sutil, dentro do paradigma radiestésico.",
@@ -78,8 +78,8 @@ function render(){
     const k=safeName(label);
     return `<article class="bovis-card"><h3>${label}</h3><label><span>Inicial</span><input type="number" name="${k}_inicial" placeholder="U.B."></label><label><span>Após sessão</span><input type="number" name="${k}_final" placeholder="U.B."></label></article>`;
   }).join("");
-  $("chakraList").innerHTML=chakras.map(x=>choice("chakra",x)).join("")+`<label class="field other-detail"><span>Especificar outro</span><input name="outro_chakra"></label>`;
-  $("axisList").innerHTML=axes.map(x=>choice("eixo",x)).join("")+choice("eixo","Outro")+`<label class="field other-detail"><span>Especificar outro</span><input name="outro_eixo"></label>`;
+  $("chakraList").innerHTML=chakras.filter(x=>x!=="Outro").map(x=>choice("chakra",x)).join("");
+  $("axisList").innerHTML=axes.filter(x=>x!=="Outro").map(x=>choice("eixo",x)).join("");
   $("protocolParts").innerHTML=parts.map((p,idx)=>`<details class="section"><summary><h2>${p.n}. ${p.title}</h2></summary>${Object.entries(p.groups).map(([g,items],gidx)=>`<div class="subgroup"><h3>${g}</h3><div class="choice-grid">${[...items,...(items.includes("Outro")?[]:["Outro"])].map(x=>choice("parte_"+(idx+1),x)).join("")}</div><label class="field other-detail"><span>Especificar outro — ${g}</span><input name="outro_parte_${idx+1}_${gidx}"></label></div>`).join("")}</details>`).join("");
   $("holisticList").innerHTML=holistic.map(x=>choice("tratamento_holistico",x)).join("");
   $("bachGroups").innerHTML=Object.entries(bachGroups).map(([g,items])=>`<div class="subgroup"><h3>${g}</h3><div class="choice-grid">${items.map(x=>choice("floral_bach",x)).join("")}</div></div>`).join(""); $("oilList").innerHTML=oils.map(x=>choice("oleo",x)).join(""); $("tarotList").innerHTML=tarotCards.map(x=>choice("taro",x)).join("");
@@ -133,6 +133,20 @@ function diagnosisIntro(){
   return `A leitura radiestésica desta sessão concentrou-se principalmente em ${labels.join(", ")}. Os quadros abaixo organizam os achados identificados e os recursos selecionados, preservando a distinção entre diagnóstico radiestésico e tratamento indicado.`;
 }
 
+
+const chakraDescriptions = {"Coronário": "Relaciona-se à conexão espiritual, propósito, fé, sentido de vida e integração com o sutil.", "Frontal / terceiro olho": "Relaciona-se à intuição, percepção, clareza mental, imaginação, discernimento e visão interior.", "Laríngeo": "Relaciona-se à comunicação, expressão, verdade pessoal, escuta e capacidade de manifestar ideias e sentimentos.", "Cardíaco": "Relaciona-se ao amor, vínculo, compaixão, perdão, pertencimento e equilíbrio entre dar e receber.", "Plexo solar": "Relaciona-se à autonomia, autoestima, poder pessoal, ação, decisão, limites e elaboração das experiências.", "Sacral": "Relaciona-se ao prazer, criatividade, sexualidade, intimidade, fluidez emocional e movimento da vida.", "Básico / raiz": "Relaciona-se à segurança, presença, aterramento, corpo físico, estabilidade e recursos materiais."};
+const axisDescriptions = {"Vínculos residuais": "Investiga o que ainda permanece incorporado em relação ao ex: sentimentos, desejos, necessidades, representações e referências afetivas que mantêm o vínculo ativo.", "Feridas emocionais": "Investiga o sofrimento que permanece ativo em decorrência da relação ou do término, incluindo mágoas, culpa, ciúme, rejeição, abandono e desvalorização.", "Apegos": "Investiga formas de apego emocional, identitário, sexual ou relacional que dificultam a passagem do vínculo anterior para uma organização mais autônoma.", "Ativação in/consciente dos vínculos": "Investiga comportamentos, pensamentos, lembranças e exposições que reativam repetidamente o vínculo e o sofrimento associado.", "Vínculos energéticos e/ou espirituais": "No paradigma radiestésico, investiga estruturas sutis associadas à manutenção do vínculo, como cordões, impregnações, formas-pensamento e influências espirituais percebidas.", "Fechamento ou barreiras à disponibilidade afetiva": "Investiga mecanismos de autoproteção, comparação, apego residual e insegurança que podem dificultar abertura emocional e disponibilidade para novos vínculos."};
+const supplementalGraphDescriptions = {"Yoshua": "No método SOLAR, é utilizado como recurso de limpeza voltado a influências obsessivas no campo sutil, dentro do paradigma radiestésico.", "Código 21": "No método SOLAR, é empregado com a intenção de limpar, desbloquear e purificar registros deformados, trabalhando simbolicamente traumas, bloqueios e medos.", "Chama Trina": "No método SOLAR, é utilizada com a intenção de fortalecer, conectar e purificar, favorecendo uma nova visão orientada pelo amor, pela verdade, pelo belo e pelo bom, especialmente diante de medo, opressão, sensação de falta de saída e traumas.", "Desembaraçador de relacionamentos": "Voltado simbolicamente a desfazer nós e emaranhamentos em vínculos afetivos, favorecendo reorganização e liberação de padrões relacionais.", "Desembaraçador material": "Direcionado a bloqueios e emaranhamentos de ordem material, prática ou financeira, dentro do paradigma radiestésico.", "Desimpregnador": "Utilizado com intenção de limpeza de impregnações e resíduos energéticos associados a pessoas, objetos ou ambientes.", "Escudo protetor": "Recurso de proteção e estabilização do campo, empregado simbolicamente para reforçar limites diante de influências externas.", "Harmonia": "Recurso orientado à harmonização e ao equilíbrio do campo trabalhado.", "Harmonia familiar": "Recurso voltado à harmonização simbólica de vínculos e dinâmicas familiares.", "Autoestima 5.7.3": "Recurso psicoemocional associado ao fortalecimento simbólico da autoestima, autovalorização e referência pessoal.", "Antimagia": "Recurso empregado, dentro do paradigma radiestésico, com intenção de neutralização e proteção diante de interferências energéticas percebidas.", "Flor da vida": "Geometria sagrada utilizada simbolicamente para harmonização, organização e integração do campo.", "Vesica Piscis": "Geometria associada à integração de polaridades, união e alinhamento de aspectos complementares.", "Triturador": "Recurso empregado simbolicamente para desagregar padrões, cargas ou formas energéticas consideradas indesejáveis.", "Alta vitalidade": "Recurso direcionado ao fortalecimento e sustentação simbólica da vitalidade."};
+function diagnosticDescription(partNumber,item){
+  if(partNumber===1) return `Indica ${item.toLowerCase()} como componente ainda presente do vínculo residual: sentimento, desejo, necessidade, representação ou referência afetiva que permanece incorporada em relação ao ex.`;
+  if(partNumber===2) return `Registra ${item.toLowerCase()} como ferida emocional ainda ativa, isto é, sofrimento que permanece relacionado à experiência da relação ou à forma como ocorreu o término.`;
+  if(partNumber===3) return `Identifica ${item.toLowerCase()} como aspecto percebido como inacabado, não dito ou não resolvido, mantendo sensação de pendência no processo de encerramento.`;
+  if(partNumber===4) return `Identifica ${item.toLowerCase()} como mecanismo de reativação: comportamento, exposição ou processo mental que volta a mobilizar o vínculo e o sofrimento associado.`;
+  if(partNumber===5) return `No paradigma radiestésico, registra ${item.toLowerCase()} como estrutura ou influência sutil pesquisada em associação à manutenção do vínculo.`;
+  if(partNumber===6) return `Identifica ${item.toLowerCase()} como possível barreira à disponibilidade afetiva, relacionada à autoproteção, ao apego residual, à comparação ou à insegurança diante de novos vínculos.`;
+  return "Aspecto identificado durante a leitura radiestésica da sessão.";
+}
+
 function generateReport(){
   const diagnosisText = diagnosisIntro();
   const b=bovisSummary();
@@ -166,18 +180,16 @@ function generateReport(){
     }))));
   }
 
-  if(c.length||val("outro_chakra")){
-    visual.push(htmlTable("Chakras envolvidos",[
-      ...c.filter(x=>x!=="Outro").map(x=>({name:x,description:"Identificado como envolvido na leitura radiestésica da sessão."})),
-      ...(val("outro_chakra")?[{name:"Outro",description:val("outro_chakra")}]:[])
-    ]));
+  if(c.length){
+    visual.push(htmlTable("Chakras envolvidos",
+      c.filter(x=>x!=="Outro").map(x=>({name:x,description:chakraDescriptions[x] || "Chakra identificado como envolvido na leitura radiestésica da sessão."}))
+    ));
   }
 
-  if(e.length||val("outro_eixo")){
-    visual.push(htmlTable("Eixos ativos",[
-      ...e.filter(x=>x!=="Outro").map(x=>({name:x,description:"Eixo identificado como ativo na leitura radiestésica da sessão."})),
-      ...(val("outro_eixo")?[{name:"Outro",description:val("outro_eixo")}]:[])
-    ]));
+  if(e.length){
+    visual.push(htmlTable("Eixos ativos",
+      e.filter(x=>x!=="Outro").map(x=>({name:x,description:axisDescriptions[x] || "Eixo identificado como ativo na leitura radiestésica da sessão."}))
+    ));
   }
 
   // DIAGNÓSTICOS — somente Partes 1 a 6.
@@ -185,7 +197,7 @@ function generateReport(){
     const arr=checked("parte_"+(idx+1)).filter(x=>x!=="Outro");
     const rows=arr.map(x=>({
       name:x,
-      description:"Aspecto identificado durante a leitura radiestésica da sessão."
+      description:diagnosticDescription(idx+1,x)
     }));
     rows.push(...collectOtherPart(idx,p));
     if(rows.length){
@@ -198,7 +210,7 @@ function generateReport(){
   const graphItems=checked("parte_7").filter(x=>x!=="Outro");
   const graphRows=graphItems.map(x=>({
     name:x,
-    description:graphDescriptions[x] || "Gráfico selecionado como recurso de tratamento dentro do protocolo radiestésico SOLAR."
+    description:graphDescriptions[x] || supplementalGraphDescriptions[x] || "Gráfico selecionado como recurso de tratamento dentro do protocolo radiestésico SOLAR; sua função específica é interpretada conforme o protocolo utilizado na sessão."
   }));
   graphRows.push(...collectOtherPart(6,treatmentPart));
   if(graphRows.length){
@@ -230,7 +242,7 @@ function generateReport(){
       name:x,
       description:bachDescriptions[x] || "Floral selecionado na leitura."
     }));
-    visual.push(`<section class="treatment-block">${htmlTable("Florais de Bach",floralRows)}</section>`);
+    visual.push(`<section class="treatment-block">${htmlTable("Florais de Bach",floralRows)}<p class="report-source"><strong>Base de referência:</strong> quadro de indicações dos Florais de Bach fornecido para o protocolo SOLAR; descrições sintetizadas a partir dos sintomas e efeitos positivos apresentados no material.</p></section>`);
   }
 
   const oilRows=o.map(x=>({
@@ -241,19 +253,16 @@ function generateReport(){
     oilRows.push({name:"Outro",description:val("outro_oleo")});
   }
   if(oilRows.length){
-    visual.push(`<section class="treatment-block">${htmlTable("Aromaterapia",oilRows)}</section>`);
+    visual.push(`<section class="treatment-block">${htmlTable("Aromaterapia",oilRows)}<p class="report-source"><strong>Base de referência:</strong> guias de óleos essenciais fornecidos para o protocolo SOLAR, complementados por literatura científica para Anis-estrelado, Pimenta-rosa, Grapefruit, Manjericão, Erva-doce/Funcho e identificação botânica do Pinho-silvestre. As descrições são sínteses informativas de aromaterapia e não constituem indicação médica.</p></section>`);
   }
 
-  if(tarot.length||val("outro_taro")){
+  if(tarot.length){
     const tarotRows=tarot.map(x=>({
       name:x,
       description:tarotDescriptions[x] || "Arcano selecionado."
     }));
-    if(val("outro_taro")){
-      tarotRows.push({name:"Outro / observação",description:val("outro_taro")});
-    }
     visual.push(`<section class="treatment-block">${htmlTable("Tarô — Arcanos Maiores",tarotRows)}
-      <p class="report-source"><strong>Fonte das descrições do Tarô:</strong> Clube do Tarô. Síntese elaborada a partir de conteúdos interpretativos do portal. ${escapeHtml(tarotSource.replace("Clube do Tarô — ",""))}</p>
+      <p class="report-source"><strong>Fonte interpretativa:</strong> ${escapeHtml(tarotSource)}. Descrições sintetizadas e adaptadas para o contexto do relatório SOLAR.</p>
     </section>`);
   }
 
@@ -261,21 +270,6 @@ function generateReport(){
     visual.push(htmlTable("Observações complementares",[
       {name:"Registro",description:val("observacoes_complementares")}
     ]));
-  }
-
-  if(val("observacoes")){
-    visual.push(htmlTable("Observações da sessão",[
-      {name:"Registro",description:val("observacoes")}
-    ]));
-  }
-
-  if(val("testemunhos")||val("comando")||val("tempo_tratamento")||val("nova_afericao")){
-    const rows=[];
-    if(val("testemunhos")) rows.push({name:"Testemunho(s) utilizado(s)",description:val("testemunhos")});
-    if(val("comando")) rows.push({name:"Comando / intenção",description:val("comando")});
-    if(val("tempo_tratamento")) rows.push({name:"Tempo de permanência / tratamento",description:val("tempo_tratamento")});
-    if(val("nova_afericao")) rows.push({name:"Nova aferição",description:fmtDate(val("nova_afericao"))});
-    visual.push(htmlTable("Registro da sessão",rows));
   }
 
   visual.push(`<section class="report-note"><h3>Orientação</h3><p>A radiestesia, no contexto do SOLAR, é apresentada como prática integrativa de observação e organização simbólica/energética. Os achados deste relatório registram a leitura realizada na sessão e não constituem diagnóstico médico ou psicológico. O atendimento não substitui avaliação, acompanhamento ou tratamento médico, psicológico, psiquiátrico ou de outros profissionais de saúde quando necessários.</p><p>Se fizer sentido para o seu processo, a leitura pode ser retomada em sessões posteriores para acompanhar os aspectos observados e os recursos selecionados. Também podem ser considerados, de forma complementar e conforme sua escolha, atendimentos de Reiki e Tarô.</p><p><strong>Rodrigo Bittencourt</strong><br>SOLAR — Sistema de observação, limpeza e alinhamento pela radiestesia</p></section></article>`);
