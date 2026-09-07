@@ -96,14 +96,27 @@ function bovisSummary(){
 
 function htmlTable(title, rows){
   if(!rows || !rows.length) return "";
-  const body = rows.map(r => `<tr><td>${escapeHtml(r[0] ?? "")}</td><td>${escapeHtml(r[1] ?? "")}</td></tr>`).join("");
-  return `<section class="report-card report-table-card">
-    <div class="report-card-title">${escapeHtml(title)}</div>
-    <div class="report-table-wrap">
+  return `<section class="report-table-section">
+    <h3>${escapeHtml(title)}</h3>
+    <div class="table-wrap">
       <table class="report-table">
         <thead><tr><th>Item</th><th>Descrição / indicação</th></tr></thead>
-        <tbody>${body}</tbody>
+        <tbody>${rows.map(r=>`<tr><td>${escapeHtml(r.name ?? r[0] ?? "")}</td><td>${escapeHtml(r.description ?? r[1] ?? "")}</td></tr>`).join("")}</tbody>
       </table>
+    </div>
+  </section>`;
+}
+
+
+function htmlSingleColumn(title, rows){
+  if(!rows || !rows.length) return "";
+  return `<section class="report-single-section">
+    <h3>${escapeHtml(title)}</h3>
+    <div class="report-single-list">
+      ${rows.map(r=>`<div class="report-single-row">
+        <strong>${escapeHtml(r.name ?? r[0] ?? "")}</strong>
+        ${(r.description ?? r[1] ?? "") ? `<span>${escapeHtml(r.description ?? r[1] ?? "")}</span>` : ""}
+      </div>`).join("")}
     </div>
   </section>`;
 }
@@ -166,23 +179,6 @@ const graphDescriptionAliases = {
 function graphReportDescription(name){
   const key = graphDescriptionAliases[name] || name;
   return graphDescriptions[key] || (typeof supplementalGraphDescriptions !== "undefined" ? supplementalGraphDescriptions[name] : "") || "Gráfico selecionado na leitura radiestésica da sessão.";
-}
-
-
-function reportListCard(title, items){
-  if(!items || !items.length) return "";
-  const rows = items.map(item => {
-    const label = typeof item === "string" ? item : (item.item || item.label || item.name || "");
-    const desc = typeof item === "string" ? "" : (item.description || item.desc || "");
-    return `<div class="report-list-row">
-      <div class="report-list-item">${escapeHtml(label)}</div>
-      ${desc ? `<div class="report-list-desc">${escapeHtml(desc)}</div>` : ""}
-    </div>`;
-  }).join("");
-  return `<section class="report-card report-card-single">
-    <div class="report-card-title">${escapeHtml(title)}</div>
-    <div class="report-list">${rows}</div>
-  </section>`;
 }
 
 function generateReport(){
@@ -264,7 +260,7 @@ function generateReport(){
     holRows.push({name:"Outro",description:val("outro_tratamento_holistico")});
   }
   if(holRows.length){
-    visual.push(`<section class="treatment-block">${htmlTable("Outros tratamentos holísticos",holRows)}</section>`);
+    visual.push(`<section class="treatment-block">${htmlSingleColumn("Outros tratamentos holísticos",holRows)}</section>`);
   }
 
   if(val("quantidade_sessoes")||val("periodicidade")||det){
