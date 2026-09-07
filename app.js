@@ -45,8 +45,8 @@ const parts = [
   }}
 ];
 
-const holistic = ["Reiki","Florais de Bach","Equilíbrio de Chakras","Meditação / Yoga","Apometria","Mesa Radiônica","Tarot Terapêutico","Radiestesia Terapêutica","Banhos","Ho’oponopono","Mantras / Afirmações","Subliminal","Musicoterapia","Barra de Access","Acupuntura","Cromoterapia","ThetaHealing","Aromaterapia","Ecoterapia","Hipnoterapia","Fitoterapia","Constelação Familiar","Quiropraxia","Outros"];
-const oils = ["Gerânio","Bergamota","Alecrim","Rosa","Tea Tree","Lavanda","Esclareia","Canela","Anis Estrelado","Laranja","Ylang Ylang","Cedro","Artemísia","Pimenta Rosa","Olíbano","Hortelã Pimenta","Melaleuca","Limão","Eucalipto","Camomila","Sândalo","Copaíba","Sálvia","Grapefruit","Lemongrass","Manjericão","Patchouli","Tomilho","Erva Doce","Pinho","Gengibre","Jasmim","Vetiver"];
+const holistic = ["Reiki","Florais de Bach","Meditação / Yoga","Apometria","Mesa Radiônica","Tarot Terapêutico","Radiestesia Terapêutica","Banhos","Ho’oponopono","Mantras / Afirmações","Subliminal","Musicoterapia","Barra de Access","Acupuntura","Cromoterapia","ThetaHealing","Aromaterapia","Ecoterapia","Hipnoterapia","Fitoterapia","Constelação Familiar","Quiropraxia","Outros"];
+const oils = ["Gerânio","Bergamota","Alecrim","Rosa","Tea Tree","Lavanda","Esclareia","Canela","Anis Estrelado","Laranja","Ylang Ylang","Cedro","Artemísia","Pimenta Rosa","Olíbano","Hortelã Pimenta","Melaleuca","Limão","Eucalipto","Camomila","Sândalo","Copaíba","Sálvia","Grapefruit","Lemongrass","Manjericão","Patchouli","Tomilho","Erva Doce","Pinho","Gengibre","Jasmim","Vetiver","Outro"];
 
 const graphDescriptions = {
   "Yoshua":"No método SOLAR, é utilizado como recurso de limpeza voltado a influências obsessivas no campo sutil, dentro do paradigma radiestésico.",
@@ -78,11 +78,11 @@ function render(){
     const k=safeName(label);
     return `<article class="bovis-card"><h3>${label}</h3><label><span>Inicial</span><input type="number" name="${k}_inicial" placeholder="U.B."></label><label><span>Após sessão</span><input type="number" name="${k}_final" placeholder="U.B."></label></article>`;
   }).join("");
-  $("chakraList").innerHTML=chakras.map(x=>choice("chakra",x)).join("");
-  $("axisList").innerHTML=axes.map(x=>choice("eixo",x)).join("");
-  $("protocolParts").innerHTML=parts.map((p,idx)=>`<details class="section"><summary><h2>${p.n}. ${p.title}</h2></summary>${Object.entries(p.groups).map(([g,items])=>`<div class="subgroup"><h3>${g}</h3><div class="choice-grid">${items.map(x=>choice("parte_"+(idx+1),x)).join("")}</div></div>`).join("")}</details>`).join("");
+  $("chakraList").innerHTML=chakras.map(x=>choice("chakra",x)).join("")+`<label class="field other-detail"><span>Especificar outro</span><input name="outro_chakra"></label>`;
+  $("axisList").innerHTML=axes.map(x=>choice("eixo",x)).join("")+choice("eixo","Outro")+`<label class="field other-detail"><span>Especificar outro</span><input name="outro_eixo"></label>`;
+  $("protocolParts").innerHTML=parts.map((p,idx)=>`<details class="section"><summary><h2>${p.n}. ${p.title}</h2></summary>${Object.entries(p.groups).map(([g,items],gidx)=>`<div class="subgroup"><h3>${g}</h3><div class="choice-grid">${[...items,...(items.includes("Outro")?[]:["Outro"])].map(x=>choice("parte_"+(idx+1),x)).join("")}</div><label class="field other-detail"><span>Especificar outro — ${g}</span><input name="outro_parte_${idx+1}_${gidx}"></label></div>`).join("")}</details>`).join("");
   $("holisticList").innerHTML=holistic.map(x=>choice("tratamento_holistico",x)).join("");
-  $("oilList").innerHTML=oils.map(x=>choice("oleo",x)).join("");
+  $("bachGroups").innerHTML=Object.entries(bachGroups).map(([g,items],i)=>`<div class="subgroup"><h3>${g}</h3><div class="choice-grid">${items.map(x=>choice("floral_bach",x)).join("")}${choice("floral_bach","Outro")}</div><label class="field other-detail"><span>Especificar outro — ${g}</span><input name="outro_floral_${i}"></label></div>`).join(""); $("oilList").innerHTML=oils.map(x=>choice("oleo",x)).join(""); $("tarotList").innerHTML=tarotCards.map(x=>choice("taro",x)).join("");
 }
 
 function bovisSummary(){
@@ -94,80 +94,26 @@ function bovisSummary(){
   return rows;
 }
 
+function reportTable(title,rows){if(!rows.length)return "";return `<section><h3>${escapeHtml(title)}</h3><table class="report-table"><thead><tr><th>Item</th><th>Descrição / indicação</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${escapeHtml(r[0])}</td><td>${escapeHtml(r[1])}</td></tr>`).join("")}</tbody></table></section>`;}
 function generateReport(){
-  const lines=[];
-  lines.push("SOLAR — SISTEMA DE OBSERVAÇÃO, LIMPEZA E ALINHAMENTO PELA RADIESTESIA");
-  lines.push("Matriz organizada por Rodrigo Bittencourt.");
-  lines.push("");
-  if(val("nome")) lines.push(`Cliente: ${val("nome")}`);
-  if(val("nascimento")) lines.push(`Data de nascimento: ${fmtDate(val("nascimento"))}`);
-  if(val("sessao")) lines.push(`Data da sessão: ${fmtDate(val("sessao"))}`);
-  if(val("queixas")) lines.push(`Queixas principais / tema da sessão: ${val("queixas")}`);
-  lines.push("");
-
-  const b=bovisSummary();
-  if(b.length){lines.push("BIÔMETRO DE BOVIS"); b.forEach(x=>lines.push("• "+x)); lines.push("");}
-
-  const c=checked("chakra");
-  if(c.length){lines.push("CHAKRAS ENVOLVIDOS"); lines.push(c.join(", ")+"."); lines.push("");}
-  const e=checked("eixo");
-  if(e.length){lines.push("EIXOS ATIVOS"); lines.push(e.join(", ")+"."); lines.push("");}
-
-  parts.forEach((p,idx)=>{
-    const arr=checked("parte_"+(idx+1));
-    if(arr.length){
-      lines.push(p.title.toUpperCase());
-      arr.forEach(x=>lines.push("• "+x));
-      if(idx===6){
-        lines.push("");
-        lines.push("Recursos selecionados:");
-        arr.forEach(x=>lines.push(`• ${x}: ${graphDescriptions[x] || "Gráfico selecionado como recurso de tratamento dentro do protocolo radiestésico SOLAR. A indicação registra a escolha realizada na sessão, sem atribuição de efeito médico ou psicoterapêutico."}`));
-      }
-      lines.push("");
-    }
-  });
-
-  const h=checked("tratamento_holistico").filter(x=>x!=="Outros");
-  const oh=val("outro_tratamento_holistico");
-  const det=val("detalhamento_terapeutica");
-  if(h.length||oh||det){
-    lines.push("OUTROS TRATAMENTOS HOLÍSTICOS");
-    if(h.length) lines.push(`Terapias indicadas: ${h.join(", ")}.`);
-    if(oh) lines.push(`Outros: ${oh}.`);
-    if(val("quantidade_sessoes")) lines.push(`Quantidade de sessões: ${val("quantidade_sessoes")}.`);
-    if(val("periodicidade")) lines.push(`Periodicidade: ${val("periodicidade")}.`);
-    if(det) lines.push(`Observações e especificações terapêuticas: ${det}`);
-    lines.push("");
-  }
-
-  const o=checked("oleo");
-  if(o.length||val("outro_oleo")){
-    lines.push("ÓLEOS ESSENCIAIS");
-    if(o.length) lines.push(o.join(", ")+".");
-    if(val("outro_oleo")) lines.push(`Outro / especificação: ${val("outro_oleo")}.`);
-    lines.push("");
-  }
-
-  if(val("observacoes")){lines.push("OBSERVAÇÕES DA SESSÃO");lines.push(val("observacoes"));lines.push("");}
-  if(val("tempo_tratamento")) lines.push(`Tempo de permanência / tratamento indicado: ${val("tempo_tratamento")}.`);
-  if(val("nova_afericao")) lines.push(`Nova aferição sugerida para: ${fmtDate(val("nova_afericao"))}.`);
-  if(val("tempo_tratamento")||val("nova_afericao")) lines.push("");
-
-  lines.push("ORIENTAÇÃO");
-  lines.push("A radiestesia, no contexto do SOLAR, é apresentada como prática integrativa de observação e organização simbólica/energética. As indicações deste relatório registram a leitura realizada na sessão e não constituem diagnóstico médico ou psicológico. O atendimento não substitui avaliação, acompanhamento ou tratamento médico, psicológico, psiquiátrico ou de outros profissionais de saúde quando necessários.");
-  lines.push("");
-  lines.push("Se fizer sentido para o seu processo, a leitura pode ser retomada em sessões posteriores para acompanhar os aspectos observados e os recursos selecionados. Também podem ser considerados, de forma complementar e conforme sua escolha, atendimentos de Reiki e Tarô.");
-  lines.push("");
-  lines.push("Rodrigo Bittencourt");
-  lines.push("SOLAR — Sistema de observação, limpeza e alinhamento pela radiestesia");
-
-  const text=lines.join("\n");
-  $("integrativeReport").value=text;
-  $("reportVisualView").innerHTML=`<article class="visual-report"><h2>SOLAR</h2><p class="subtitle">Sistema de observação, limpeza e alinhamento pela radiestesia</p><div class="multiline">${escapeHtml(text)}</div></article>`;
-  saveLocal();
-  return text;
+ const text=[], visual=[]; text.push("SOLAR — SISTEMA DE OBSERVAÇÃO, LIMPEZA E ALINHAMENTO PELA RADIESTESIA","Matriz organizada por Rodrigo Bittencourt.","");
+ visual.push(`<article class="visual-report"><h2>SOLAR</h2><p class="subtitle">Sistema de observação, limpeza e alinhamento pela radiestesia</p>`);
+ const ident=[]; if(val("nome")){text.push(`Cliente: ${val("nome")}`);ident.push(["Cliente",val("nome")])} if(val("sessao")){text.push(`Data da sessão: ${fmtDate(val("sessao"))}`);ident.push(["Data da sessão",fmtDate(val("sessao"))])} if(val("queixas")){text.push(`Queixas / tema: ${val("queixas")}`);ident.push(["Queixas / tema",val("queixas")])} text.push(""); visual.push(reportTable("Identificação",ident));
+ const bv=bovisSummary(); if(bv.length){text.push("BIÔMETRO DE BOVIS",...bv.map(x=>"• "+x),"");visual.push(reportTable("Biômetro de Bovis",bv.map(x=>[x.split(":")[0],x.substring(x.indexOf(":")+1).trim()])))}
+ const c=checked("chakra").filter(x=>x!=="Outro"), cr=c.map(x=>[x,"Identificado como envolvido na leitura da sessão."]); if(val("outro_chakra"))cr.push(["Outro",val("outro_chakra")]); if(cr.length){text.push("CHAKRAS ENVOLVIDOS",...cr.map(r=>`• ${r[0]}: ${r[1]}`),"");visual.push(reportTable("Chakras envolvidos",cr))}
+ const e=checked("eixo").filter(x=>x!=="Outro"), er=e.map(x=>[x,"Eixo identificado como ativo na leitura da sessão."]); if(val("outro_eixo"))er.push(["Outro",val("outro_eixo")]); if(er.length){text.push("EIXOS ATIVOS",...er.map(r=>`• ${r[0]}: ${r[1]}`),"");visual.push(reportTable("Eixos ativos",er))}
+ parts.forEach((p,i)=>{let rows=checked("parte_"+(i+1)).filter(x=>x!=="Outro").map(x=>[x,i===6?(graphDescriptions[x]||"Gráfico selecionado como recurso de tratamento no protocolo SOLAR."):"Aspecto identificado durante a leitura da sessão."]);Object.keys(p.groups).forEach((g,j)=>{let v=val(`outro_parte_${i+1}_${j}`);if(v)rows.push([`Outro — ${g}`,v])});if(rows.length){text.push(p.title.toUpperCase(),...rows.map(r=>`• ${r[0]}: ${r[1]}`),"");visual.push(reportTable(p.title,rows))}});
+ const hol=checked("tratamento_holistico").filter(x=>x!=="Outros").map(x=>[x,"Tratamento complementar identificado na leitura."]);if(val("outro_tratamento_holistico"))hol.push(["Outro",val("outro_tratamento_holistico")]);if(hol.length){text.push("OUTROS TRATAMENTOS HOLÍSTICOS",...hol.map(r=>`• ${r[0]}: ${r[1]}`),"");visual.push(reportTable("Outros tratamentos holísticos",hol))}
+ const flor=checked("floral_bach").filter(x=>x!=="Outro").map(x=>[x,bachDescriptions[x]||"Floral selecionado na leitura."]);for(let i=0;i<7;i++){let v=val(`outro_floral_${i}`);if(v)flor.push(["Outro",v])}if(flor.length){text.push("FLORAIS DE BACH",...flor.map(r=>`• ${r[0]}: ${r[1]}`),"");visual.push(reportTable("Florais de Bach",flor))}
+ const arom=checked("oleo").filter(x=>x!=="Outro").map(x=>[x,oilDescriptions[x]||"Óleo essencial selecionado na leitura."]);if(val("outro_oleo"))arom.push(["Outro",val("outro_oleo")]);if(arom.length){text.push("AROMATERAPIA",...arom.map(r=>`• ${r[0]}: ${r[1]}`),"");visual.push(reportTable("Aromaterapia",arom))}
+ const tar=checked("taro").filter(x=>x!=="Outro").map(x=>[x,`${tarotDescriptions[x]||"Arcano selecionado."} Fonte: ${tarotSource}`]);if(val("outro_taro"))tar.push(["Outro / observação",val("outro_taro")]);if(tar.length){text.push("TARÔ — ARCANOS MAIORES",...tar.map(r=>`• ${r[0]}: ${r[1]}`),"");visual.push(reportTable("Tarô — Arcanos Maiores",tar))}
+ if(val("detalhamento_terapeutica")){text.push("OBSERVAÇÕES E ESPECIFICAÇÕES TERAPÊUTICAS",val("detalhamento_terapeutica"),"");visual.push(reportTable("Observações e especificações terapêuticas",[["Registro",val("detalhamento_terapeutica")]]))}
+ if(val("observacoes_complementares")){text.push("OBSERVAÇÕES COMPLEMENTARES",val("observacoes_complementares"),"");visual.push(reportTable("Observações complementares",[["Observações",val("observacoes_complementares")]]))}
+ if(val("observacoes")){text.push("OBSERVAÇÕES DA SESSÃO",val("observacoes"),"")}
+ text.push("ORIENTAÇÃO","A radiestesia, no contexto do SOLAR, é apresentada como prática integrativa de observação e organização simbólica/energética. Este relatório não constitui diagnóstico médico ou psicológico e não substitui acompanhamento profissional de saúde quando necessário.","","Rodrigo Bittencourt","SOLAR — Sistema de observação, limpeza e alinhamento pela radiestesia");
+ visual.push(`<section class="report-note"><h3>Orientação</h3><p>A radiestesia, no contexto do SOLAR, é apresentada como prática integrativa de observação e organização simbólica/energética. Este relatório não constitui diagnóstico médico ou psicológico e não substitui acompanhamento profissional de saúde quando necessário.</p></section></article>`);
+ const out=text.join("\n");$("integrativeReport").value=out;$("reportVisualView").innerHTML=visual.join("");saveLocal();return out;
 }
-
 function collect(){
   const data={};
   document.querySelectorAll("#sessionForm [name]").forEach(el=>{
@@ -208,3 +154,5 @@ $("loadDataFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)
 $("clearForm").addEventListener("click",clearAll);
 $("clearFormBottom").addEventListener("click",clearAll);
 loadLocal();
+
+let solarDirty=false;function markAutosaved(){solarDirty=false;const e=$("autosaveStatus");if(e)e.textContent=`Salvo automaticamente às ${new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}`;}document.getElementById("sessionForm").addEventListener("input",()=>{solarDirty=true;saveLocal();markAutosaved();});window.addEventListener("beforeunload",e=>{if(solarDirty){e.preventDefault();e.returnValue="";}});$("endSession")?.addEventListener("click",()=>{if(confirm("Deseja baixar uma cópia dos dados antes de encerrar esta sessão?")){downloadData();setTimeout(()=>{if(confirm("Deseja limpar o formulário desta sessão agora?"))clearAll()},250)}else if(confirm("Deseja encerrar e limpar sem baixar uma cópia?"))clearAll();});

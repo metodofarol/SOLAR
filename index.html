@@ -20,6 +20,8 @@
       <button type="button" class="button secondary" id="saveData">Salvar dados</button>
       <button type="button" class="button secondary" id="loadData">Carregar dados</button>
       <button type="button" class="button secondary" id="clearForm">Limpar</button>
+      <button type="button" class="button secondary" id="endSession">Encerrar sessão</button>
+      <span id="autosaveStatus" class="autosave-status">Salvamento automático ativo</span>
       <button type="button" class="button primary" id="printForm">Salvar formulário em PDF</button>
       <input id="loadDataFile" class="file-input" type="file" accept="application/json">
     </div>
@@ -78,14 +80,12 @@
         </label>
       </details>
 
+      <details class="section"><summary><h2>13. Florais de Bach</h2></summary><p class="hint">Organização conforme o biômetro fornecido.</p><div id="bachGroups"></div></details>
+      <details class="section"><summary><h2>14. Aromaterapia</h2></summary><p class="hint">Selecione os óleos indicados; o relatório apresentará uma indicação resumida.</p><div id="oilList" class="choice-grid choice-grid-wide"></div><label class="field therapy-detail"><span>Outro óleo / especificação</span><input type="text" name="outro_oleo"></label></details>
+      <details class="section"><summary><h2>15. Tarô — Arcanos Maiores</h2></summary><p class="hint">Os arcanos selecionados recebem resumo interpretativo e referência ao Clube do Tarô no relatório.</p><div id="tarotList" class="choice-grid choice-grid-wide"></div><label class="field therapy-detail"><span>Outro / observação sobre o Tarô</span><input type="text" name="outro_taro"></label></details>
+      <details class="section"><summary><h2>16. Observações complementares</h2></summary><label class="field"><span>Observações</span><textarea name="observacoes_complementares" rows="7"></textarea></label></details>
       <details class="section">
-        <summary><h2>13. Óleos essenciais</h2></summary>
-        <div id="oilList" class="choice-grid choice-grid-wide"></div>
-        <label class="field therapy-detail"><span>Outro óleo / especificação</span><input type="text" name="outro_oleo"></label>
-      </details>
-
-      <details class="section">
-        <summary><h2>14. Registro da sessão</h2></summary>
+        <summary><h2>17. Registro da sessão</h2></summary>
         <div class="grid grid-2">
           <label class="field"><span>Testemunho(s) utilizado(s)</span><textarea name="testemunhos" rows="4"></textarea></label>
           <label class="field"><span>Comando / intenção utilizada</span><textarea name="comando" rows="4"></textarea></label>
@@ -96,7 +96,7 @@
       </details>
 
       <details class="section" id="reportSection">
-        <summary><h2>15. Relatório da sessão</h2></summary>
+        <summary><h2>18. Relatório da sessão</h2></summary>
         <div class="report-actions no-print">
           <button type="button" class="button secondary" id="generateReport">Gerar / atualizar relatório</button>
           <button type="button" class="button primary" id="saveReportPdf">Salvar relatório em PDF</button>
@@ -114,6 +114,7 @@
     </form>
   </main>
 </div>
+<script src="catalogos.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
