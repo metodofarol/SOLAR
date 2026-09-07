@@ -97,3 +97,58 @@ button,input,textarea,select{font:inherit}.page-shell{width:min(1120px,calc(100%
   .report-output .report-table-section,
   .report-output .report-single-section{box-shadow:none;break-inside:avoid;}
 }
+
+
+/* ===== SOLAR V3.9.3 — relatório editável ===== */
+.report-therapist-name{
+  font-size:.62em;
+  font-weight:500;
+  color:var(--wine);
+  white-space:nowrap;
+}
+.report-editable{
+  display:block;
+  min-height:1.25em;
+  padding:2px 4px;
+  border-radius:4px;
+  cursor:text;
+  white-space:pre-wrap;
+}
+.report-editable:hover{
+  outline:1px dashed #b9c9c1;
+  background:#fbfdfc;
+}
+.report-editable:focus{
+  outline:2px solid #b7cfc3;
+  background:#fffef9;
+}
+@media print{
+  .report-editable{outline:none!important;background:transparent!important;padding:0;}
+}
+\n\n/* ===== SOLAR V3.9.4 - capa exclusiva do relatório em PDF/impressão ===== */
+.report-print-cover{display:none;}
+@media print{
+  body.print-report-only .report-print-cover{
+    display:block!important;
+    position:relative;
+    width:100%;
+    height:100vh;
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    break-after:page;
+    page-break-after:always;
+    background:#f7cc8b;
+  }
+  body.print-report-only .report-print-cover img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center center;
+  }
+  body.print-report-only .page-shell{
+    break-before:page;
+    page-break-before:always;
+  }
+}

@@ -103,3 +103,21 @@ O relatório passa a explicar chakras, eixos ativos e cada item diagnóstico das
 - O conflito impedia `render()` de executar no navegador e, por isso, os campos dinâmicos do formulário ficavam vazios.
 - Restaurada a renderização dos campos de Bovis, Chakras, Eixos, Partes 1–7, tratamentos holísticos, Florais, Aromaterapia e Tarô.
 - Mantidas as melhorias do relatório e as descrições dos gráficos.
+
+
+## V3.9.3 — descrições individualizadas e relatório editável
+- Descrições das Partes 1–6 substituídas por banco individualizado baseado em `Descrição Biometros Divorcio.pdf`.
+- Eliminados os textos genéricos repetitivos para os radiantes.
+- Quando não existe descrição no banco, a célula fica em branco.
+- Células de descrição do relatório são editáveis diretamente.
+- Edições manuais do relatório são salvas automaticamente no navegador e incluídas no arquivo JSON de backup.
+- Cabeçalho atualizado para `SOLAR - Rodrigo Bittencourt`.
+- Mantidas as descrições específicas dos gráficos, florais, óleos, chakras, eixos e tarô quando disponíveis.
+
+
+## V3.9.4 - capa do relatório
+- Incorporada a capa fornecida em `capa.pdf` como `capa-relatorio.png`.
+- A capa aparece somente ao usar **Salvar relatório em PDF** / impressão do relatório.
+- O formulário na tela permanece sem a capa.
+- O conteúdo do relatório começa em nova página após a capa.
+- Mantidas as funcionalidades e correções da V3.9.3.
